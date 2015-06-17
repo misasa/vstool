@@ -1,0 +1,188 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require 'date'
+require 'yaml'
+require 'vstool'
+require 'visual_stage'
+
+PrefFile = "~/.vs2007rc"
+
+# try to read config file
+base_path = "C:\\VS2007data"
+begin
+  myconfigs      = YAML.load(File.read(File.expand_path(PrefFile)))
+  base_path = myconfigs['vsdata_path']
+ rescue
+  puts "In #{File.basename(__FILE__)}: fail to load a config file <#{PrefFile}>"
+  myconfigs		= {'vsdata_path' => base_path}
+  open(File.expand_path(PrefFile), "w") do |f|
+  	YAML.dump(myconfigs, f)
+  end
+end
+
+
+params = {}
+# options = OptionParser.new do |opts|
+# 	script_name = File.basename($0)
+# 	# opts.banner = "usage: #{script_name} [options] file"
+#     opts.banner = <<"EOS"
+# NAME
+#   #{File.basename($0, '.*')} - Attach image to VisualStage without manipulation
+#
+# SYNOPSIS
+#   #{script_name} [options] imagefile
+#
+# DESCRIPTION
+#   Attach image to VisualStage without manipulation.  You need to
+#   have a set of image and image-info file.  The image-info file is
+#   created by JEOL JSM-7001F or JSM-8530F.  See `vs-attach-image' for
+#   full operation including manipulation and attachment.
+#
+# EXAMPLE
+#   $ ls
+#   oiso_ol1_cbk1@2013.jpg  oiso_ol1_cbk1@2013.txt
+#   $ #{script_name} oiso_ol1_CBK1@2013.jpg
+#
+# SEE ALSO
+#   vs-attach-image
+#   http://dream.misasa.okayama-u.ac.jp
+#
+# IMPLEMENTATION
+#   Copyright (c) 2015 ISEI, Okayama University
+#   Licensed under the same terms as Ruby
+#
+# HISTORY
+#   May 20, 2015: Add documentation by MY
+#
+# OPTIONS
+# EOS
+# 	opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+#     	params[:verbose] = v
+#   	end
+# 	# opts.on("-b", "--base-directory BASE_DIR", "Specify base directory: #{params[:base_path]}") do |v|
+# 	# 	params[:base_path] = v
+# 	# end   	
+# 	opts.on("-n", "--sample-name SAMPLE_NAME", "Specify sample name: #{params[:sample_name]}") do |v|
+# 		params[:sample_name] = v
+# 	end
+# 	opts.on("-p", "--point POINT_NUMBER", "Specify point number: #{params[:point_no]}") do |v|
+# 		params[:point_no] = v
+# 	end 
+# 	opts.on("-l", "--locate [X,Y]", "Specify locate in micro meter: ex. [0,0]") do |v|
+# 		locate = eval(v)
+# 		puts "invalid locate" unless locate.size == 2
+# 		params[:locate] = locate
+# 	end
+# 	opts.on("-s", "--size [X,Y]", "Specify size in micro meter: ex. [1280,640]") do |v|
+# 		size = eval(v)
+# 		puts "invalid size" unless size.size == 2
+# 		params[:size] = size
+# 	end
+# 	opts.on("-c", "--center [X,Y]", "Specify center in micro meter: ex. [640,320]") do |v|
+# 		val = eval(v)
+# 		puts "invalid center" unless val.size == 2
+# 		params[:center] = val
+# 	end
+# 	opts.on("-m", "--magnification MAGNIFICATION", "Specify magnification") do |v|
+# 		params[:magnification] = v
+# 	end
+# 	opts.on("-k", "--background", "Specify background image") do |v|
+#     	params[:background] = v
+#   	end
+# 	opts.on_tail("-h", "--help", "Show this message.") do |v|
+# 		puts opts
+# 		exit
+# 	end
+# end
+# options.parse!
+
+# unless ARGV.size == 1
+#   puts options.to_s
+#    exit
+# end 
+
+# file_name = ARGV.shift
+# file_path = File.expand_path(file_name)
+
+app = Vstool::Vsattach.new(params, ARGV)
+app.start
+exit
+verbose = params[:verbose]
+#base_path = params[:base_path]
+sample_name = params[:sample_name]
+point_name = params[:point_name]
+point_no = params[:point_no]
+attach_name = Date.today.strftime("%Y-%m-%d")
+# h0 = 28000 # Assume an image with aspect ratio 4x3 and height 28 mm
+# center_x = 2/3.0 * h0
+# center_y = 0.5 * h0
+# width_in_um = 4/3.0 * h0
+# height_in_um = h0
+# magnification = 120_000/width_in_um
+
+@app = VisualStage::VS2007API.new({:verbose => verbose})
+
+
+# VS opens a sample folder
+begin
+	@app.file_open(base_path,sample_name,"YES") if sample_name
+rescue
+	puts "In #{File.basename(__FILE__)}: fail to open #{File.join(base_path, sample_name)}"
+	puts "creating #{File.join(base_path, sample_name)}..."
+	@app.file_new(base_path,sample_name,"YES")
+	exit
+end
+
+begin
+	@app.set_select_address(point_no) if point_no
+rescue
+	@app.add_address()
+	@app.set_address_name(point_name)
+	@app.set_address_locate(0,0)
+	exit
+end
+
+begin
+	file_path = @app.cygpath(file_path, "w") if RUBY_PLATFORM.downcase =~ /cygwin/
+	vargs = @app.add_attach_file(file_path)
+	attach_no = vargs[0].to_i
+	@app.set_select_attach(attach_no, "TRUE")
+	# Name
+	@app.set_attach_name(attach_no, attach_name)
+
+	if params[:locate]
+	# Locate (  0,   0)
+		x,y = params[:locate]
+		@app.set_attach_locate(attach_no, x, y)
+		puts sprintf("Locate ( %.3f, %.3f)",0,0) if verbose
+	end
+
+	# SIZE
+	if params[:size]
+		width_in_um,height_in_um = params[:locate]
+		params[:center] = [ width_in_um/2.0, height_in_um/2.0 ] unless params[:center]
+		params[:magnification] = 120_000/width_in_um unless params[:magnification]
+		@app.set_attach_size(attach_no, width_in_um, height_in_um)
+		puts sprintf("Size ( %.3f, %.3f)",width_in_um,height_in_um) if verbose
+	end
+
+	# Center
+	if params[:center]
+		center_x,center_y = params[:center]
+		# center_x += point_no * 1000
+		@app.set_attach_center(attach_no, center_x, center_y)	
+		puts sprintf("Center ( %.3f, %.3f)",center_x,center_y) if verbose
+	end
+	# Magnification
+	if params[:magnification]
+		@app.set_attach_imag(attach_no, magnification)
+		puts sprintf("Magnification %.3f", magnification) if verbose
+	end
+	# Background
+	if params[:background]
+	#@app.set_select_bg_image(-1)	
+		@app.set_select_bg_image(attach_no)
+	end
+rescue =>  ex
+	puts ex
+end

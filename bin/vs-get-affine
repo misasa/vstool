@@ -1,0 +1,93 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require 'date'
+require 'yaml'
+require 'vstool'
+
+class Array
+	def to_yaml_style
+		return :inline
+	end
+
+	def to_str
+		vals = []
+		self.each do |a|
+			if a.is_a? Array
+				vals << a.to_str
+			else
+				vals << a.to_s
+			end
+		end
+		return "[" + vals.join(",") + "]"
+	end
+end
+params = {:format => :text}
+
+options = OptionParser.new do |opts|
+	script_name = File.basename($0)
+	# opts.banner = "usage: #{script_name} [options] file ..."
+    opts.banner = <<"EOS"
+NAME
+  vs-get-affine - Obtain current Affine matrix from VisualStage 2007
+
+SYNOPSIS AND USAGE
+  vs-get-affine [options]
+
+DESCRIPTION
+  Obtain current Affine matrix from VisualStage 2007.  This script
+  talks to VisualStage 2007 and writes out the current Affine matrix
+  in Matlab format to standard out.
+
+ARGUMENTS AND OPTIONS
+EXAMPLE
+  $ vs-get-affine
+  [[-1.00272039761,-0.0800113838137,-17004.5691523],[0.0732111925464,-1.00736737687,8141.86986888],[-7.16894556685e-11,4.90354245144e-10,1.0]]
+  $ vs-get-affine > VSzJSM7001F.txt
+
+SEE ALSO
+  vs-add-file
+  vs-attach-image
+  VisualStage 2007
+  vs-get-affine (Python version)
+
+IMPLEMENTATION
+  Copyright (C) 2012 Okayama University
+  License GPLv3+: GNU GPL version 3 or later
+
+HISTORY AND TODO
+  May 20, 2015: TK adds documentation
+
+OPTIONS
+EOS
+   	opts.on("-f", "--format FORMAT", [:text, :yaml],
+            "Select format: 'text' or 'yaml' [default: text]") do |t|
+    	params[:format] = t
+  	end
+
+  	# opts.on("-o", "--output-file output-file", "Specify output file") do |v|
+   #  	params[:output_file] = v
+  	# end 
+
+	opts.on_tail("-h", "--help", "Show this message.") do |v|
+		puts opts
+		exit
+	end
+end
+options.parse!
+
+app = Vstool::Base.new
+begin
+	h = app.get_stage2world
+rescue => ex
+	STDERR.puts ex.to_s
+	exit
+end
+io = STDOUT
+
+
+case params[:format]
+	when :yaml
+		io.puts h.to_yaml
+	else
+		io.puts h.to_str
+	end

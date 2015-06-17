@@ -1,5 +1,96 @@
 #!/usr/bin/env ruby
+require 'optparse'
+require 'date'
+require 'yaml'
 require 'vstool'
 
-args = ARGV.clone
-puts args
+PrefFile = "~/.vs2007rc"
+
+# try to read config file
+base_path = "C:\\VS2007data"
+begin
+  myconfigs      = YAML.load(File.read(File.expand_path(PrefFile)))
+  base_path = myconfigs['vsdata_path']
+ rescue
+  puts "In #{File.basename(__FILE__)}: I will make a new config file <#{PrefFile}>."
+  myconfigs		= {'vsdata_path' => base_path, 'world_origin' => "ld", 'stage_origin' => "ru"}
+  open(File.expand_path(PrefFile), "w") do |f|
+  	YAML.dump(myconfigs, f)
+  end
+end
+
+options = OptionParser.new do |opts|
+	script_name = File.basename($0)
+    opts.banner = <<"EOS"
+NAME
+  #{File.basename($0, '.*')} - Attach image to VisualStage 2007
+
+SYNOPSIS
+  #{script_name} [options] imagefile
+
+DESCRIPTION
+  Attach image to VisualStage 2007.  You need to have a set of image
+  and image-info file.  The image-info file is created by JEOL
+  JSM-7001F or JSM-8530F.  Three processes are involved.  Only JPG and
+  TIF are supported.  Use `loop-vs-attach-image' to attach images
+  automatically in certain folder.
+
+  1. Creation of image-info file in world coordinate
+
+     From image-info file in device coordinate and Affine matrix in
+     VS, image-info file in world coordinate should be created.  The
+     affine matrix in VS can be monitored by `vs-get-affine'.
+
+  2. Crop and spin the image
+
+     On import, VisualStage 2007 1.1 accepts coordinate, width, and
+     height but rotation as image properties.  Unless image is rotated
+     in advance, all spin info is discarded on import.  Thus an image
+     will be cropped, spinned, and stored in deleteme.d/@crop and
+     deleteme.d/@crop@spin, respectively.  You have additional four
+     files.
+
+  3. Attach three images to VS
+
+     The three images are attached to VS according to image-info file
+     in world coordinate.  The operation can be done by `vs-add-file'.
+
+EXAMPLE
+  $ ls
+  tt_grt_bcg12@39.jpg  tt_grt_bcg12@39.txt
+  $ #{script_name} IMG_0821.JPG
+  ...
+  $ ls -lR
+  tt_grt_bcg12@39.jpg
+  tt_grt_bcg12@39.txt
+  tt_grt_bcg12@39.vs
+  deleteme.d/@crop/tt_grt_bcg12@39.jpg
+  deleteme.d/@crop/tt_grt_bcg12@39.txt
+  deleteme.d/@crop@spin/tt_grt_bcg12@39.jpg
+  deleteme.d/@crop@spin/tt_grt_bcg12@39.txt
+
+SEE ALSO
+  http://dream.misasa.okayama-u.ac.jp
+  loop-vs-attach-image
+  vs-add-file
+  vs-get-affine
+
+IMPLEMENTATION
+  Copyright (c) 2015 ISEI, Okayama University
+  Licensed under the same terms as Ruby
+
+HISTORY
+  May 20, 2015: Add documentation by MY
+  May 21, 2015: Add documentation by TK
+
+OPTIONS
+EOS
+end
+options.parse!
+
+params = {:sample_name => "image2sem", :base_path => base_path}
+params[:stage_origin] = myconfigs['stage_origin'] || "ru"
+params[:world_origin] = myconfigs['world_origin'] || "ld"
+
+app = Vstool::Image2vs.new(params,ARGV)
+app.start

@@ -1,0 +1,165 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require 'date'
+require 'yaml'
+require 'visual_stage'
+
+
+PrefFile = "~/.vs2007rc"
+
+# try to read config file
+base_path = "C:\\VS2007data"
+begin
+  puts "#{PrefFile} reading..."
+  myconfigs      = YAML.load(File.read(File.expand_path(PrefFile)))
+  base_path = myconfigs['vsdata_path']
+ rescue
+  puts "In #{File.basename(__FILE__)}: fail to load a config file <#{PrefFile}>"
+  myconfigs		= {'vsdata_path' => base_path}
+  open(File.expand_path(PrefFile), "w") do |f|
+  	YAML.dump(myconfigs, f)
+  end
+end
+
+params = {}
+options = OptionParser.new do |opts|
+	script_name = File.basename($0)
+	# opts.banner = "usage: #{script_name} [options] image-file"
+    opts.banner = <<"EOS"
+NAME
+  #{File.basename($0, '.*')} - Attach image of sample holder for 1270 to VisualStage
+
+SYNOPSIS
+  #{script_name} [options] imagefile
+
+HISTORY
+  May 20, 2015: Add documentation
+
+DESCRIPTION
+  This program attaches upper view of Cameca's sample holder to
+  VisualStage.
+
+  (1) Take a picture to locate 28-mm-phi Ta-ring to the center and fit
+      the outline of the ring to full height of image.
+
+  (2) Launch VisualStage 2007.
+
+  (3) Launch #{script_name} with imagefile as argument.  The image
+      will be stored to sample`image2sims' in VisualStage 2007.
+
+PREFERENCE FILE
+  This program tries to locate VisualStage's datafile from
+  |~/.vs2007rc|.  If the file is not found, it is created with default
+  configuration.  Revise it accordingly.  The initial file looks like
+  below.
+
+  ---
+  vsdata_path: C:\VS2007data
+
+EXAMPLE
+  $ cd ~/Dropbox/Downloads
+  $ #{script_name} IMG_0821.JPG
+
+SEE ALSO
+  vs-attach-image-1269
+  vs-attach-image
+  loop-vs-attach-image
+  http://dream.misasa.okayama-u.ac.jp
+
+IMPLEMENTATION
+  Copyright (c) 2015 ISEI, Okayama University
+  Licensed under the same terms as Ruby
+
+OPTIONS
+EOS
+	opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+    	params[:verbose] = v
+  	end
+ 	opts.on_tail("-h", "--help", "Show this message.") do |v|
+		puts opts
+		exit
+	end
+end
+options.parse!
+
+STDERR.puts "not implemented"
+exit
+if ARGV.size != 1
+	puts "usage: #{File.basename($0, '.*')} imagefile"
+	exit
+end
+
+imagefile = ARGV.shift
+imagefile_path = File.expand_path(imagefile)
+
+unless File.exists?(imagefile_path)
+	puts "#{imagefile_path} does not exist"
+	exit
+end
+
+verbose = true
+sample_name = "image2sims"
+point_name = "origin"
+attach_name = Date.today.strftime("%Y-%m-%d")
+h0 = 28000 # Assume an image with aspect ratio 4x3 and height 28 mm
+center_x = 2/3.0 * h0
+center_y = 0.5 * h0
+width_in_um = 4/3.0 * h0
+height_in_um = h0
+magnification = 120_000/width_in_um
+
+
+@app = VisualStage::VS2007API.new({:verbose => verbose})
+
+
+# VS opens a sample folder
+begin
+	@app.file_open(base_path,sample_name,"YES")
+rescue
+	puts "In #{File.basename(__FILE__)}: fail to open #{File.join(base_path, sample_name)}"
+	puts "creating #{File.join(base_path, sample_name)}..."
+	@app.file_new(base_path,sample_name,"YES")
+	exit
+end
+
+point_no = 0
+begin
+	@app.set_select_address(point_no)
+rescue
+	@app.add_address()
+	@app.set_address_name(point_name)
+	@app.set_address_locate(0,0)
+	exit
+end
+
+begin
+	imagefile_path = @app.cygpath(imagefile_path, "w") if RUBY_PLATFORM.downcase =~ /cygwin/
+	vargs = @app.add_attach_file(imagefile_path)
+	attach_no = vargs[0].to_i
+	@app.set_select_attach(attach_no, "TRUE")
+	# Name
+	@app.set_attach_name(attach_no, attach_name)
+
+	# Locate (  0,   0)
+	@app.set_attach_locate(attach_no, 0.0, 0.0)
+	puts sprintf("Locate ( %.3f, %.3f)",0,0) if verbose
+
+	# Center
+	center_x += point_no * 1000
+	@app.set_attach_center(attach_no, center_x, center_y)	
+	puts sprintf("Center ( %.3f, %.3f)",center_x,center_y) if verbose
+
+	# SIZE
+	@app.set_attach_size(attach_no, width_in_um, height_in_um)
+	puts sprintf("Size ( %.3f, %.3f)",width_in_um,height_in_um) if verbose
+
+	# Magnification
+	@app.set_attach_imag(attach_no, magnification)
+	puts sprintf("Magnification %.3f", magnification) if verbose
+
+	# Background
+	#@app.set_select_bg_image(-1)	
+	@app.set_select_bg_image(attach_no)
+rescue =>  ex
+	puts ex
+end

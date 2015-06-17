@@ -1,0 +1,99 @@
+#!/usr/bin/env ruby
+require 'vstool'
+require 'optparse'
+
+PrefFile = "~/.vs2007rc"
+
+# try to read config file
+base_path = "C:\\VS2007data"
+begin
+  myconfigs      = YAML.load(File.read(File.expand_path(PrefFile)))
+  base_path = myconfigs['vsdata_path']
+ rescue
+  puts "In #{File.basename(__FILE__)}: fail to load a config file <#{PrefFile}>"
+  myconfigs		= {'vsdata_path' => base_path, 'world_origin' => "ld", 'stage_origin' => "ru"}
+  open(File.expand_path(PrefFile), "w") do |f|
+  	YAML.dump(myconfigs, f)
+  end
+end
+
+options = OptionParser.new do |opts|
+	script_name = File.basename($0)
+    opts.banner = <<"EOS"
+NAME
+  #{File.basename($0, '.*')} - Keep attach image to VisualStage
+
+SYNOPSIS
+  #{script_name} [options]
+
+DESCRIPTION
+  Keep attach image to VisualStage.  This command is daemon for
+  `vs-attach-image'.  This monitors any new images on current working
+  directory and invoke `vs-attach-image'.  First make sure if
+  `vs-attach-image' works.  Then issue this command without argument.
+
+EXAMPLE
+  $ cd /cygdrive/y/tatsukix/BCG12/2015-05-18
+  $ #{script_name}
+  Is your stone opened and aligned on VisualStage? (yes/NO) yes
+  Waiting for a new image in |/cygdrive/y/tatsukix/BCG12/2015-05-18|.
+  processing |tt_grt_bcg12@40.jpg|...
+  generating |./deleteme.d/@crop/tt_grt_bcg12@40.jpg|...
+  generating |./deleteme.d/@crop@spin/tt_grt_bcg12@40.jpg|...
+  ...
+  saving |Z:/Tatsukix/BCG12/ADDRESS.DAT|... [OK]
+  Waiting for a new image in |/cygdrive/y/tatsukix/BCG12/2015-05-18|.
+
+SEE ALSO
+  vs-attach-image
+  http://dream.misasa.okayama-u.ac.jp
+
+IMPLEMENTATION
+  Copyright (c) 2015 ISEI, Okayama University
+  Licensed under the same terms as Ruby
+
+HISTORY
+  May 20, 2015: Add documentation by MY
+  May 21, 2015: Add documentation by TK
+
+OPTIONS
+EOS
+end
+options.parse!
+
+params = {:sample_name => "image2sem", :base_path => base_path}
+params[:stage_origin] = myconfigs['stage_origin'] || "ru"
+params[:world_origin] = myconfigs['world_origin'] || "ld"
+
+app = Vstool::Image2vs.new(params,ARGV)
+
+# Is your stone opened and aligned on VisualStage? (yes/no)
+
+# p app.inputfiles
+# app.start
+msg = "Is your stone opened and aligned on VisualStage, and did you quit Dropbox? (yes/NO) "
+while true do
+	print msg
+	p = gets.chomp
+	ans = p.downcase
+	break if ans == 'yes' || ans == 'y'
+end
+
+waiting_msg = "Waiting for a new image in |#{Dir.pwd}|."
+puts waiting_msg
+processed_files = []
+while true do
+	image_files = Dir.glob(["*.tif","*.jpg"])
+	process_files = image_files - processed_files unless image_files.empty?
+	if process_files && !process_files.empty?
+		app.inputfiles = process_files
+		output_files = app.process_files
+		if processed_files.empty?
+			processed_files = output_files.dup
+		else
+			processed_files.concat(output_files).uniq!
+		end
+	puts waiting_msg
+	end
+	sleep(3)
+end
