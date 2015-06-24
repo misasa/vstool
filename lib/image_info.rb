@@ -3,7 +3,7 @@ require 'opencvtool'
 require 'visual_stage'
 class ImageInfo
 #  attr_accessor :title, :scan_rotation, :pixels_per_um, :width_in_pix, :height_in_pix, :width_in_um, :height_in_um, :magnification, :stage_position, :stage_x_in_um, :stage_y_in_um, :affine
-  attr_accessor :image_path, :info_path
+  attr_accessor :image_path, :info_path, :image_dimensions
   attr_accessor :name, :size, :locate, :center, :pixs
 #  attr_accessor :stage_origin
   attr_accessor :opencvtool
@@ -85,6 +85,10 @@ class ImageInfo
 #    @stage_origin = opts[:stage_origin] || "lu"
 
 #    @@opencvtool = OpenCvTool.new(:verbose => @verbose)
+  end
+
+  def self.image_dimension(path)
+    pixs = Dimensions.dimensions(path)
   end
   
   def self.load(path, opts = {})
@@ -287,7 +291,7 @@ class ImageInfo
     Math.sqrt((p2[0] - p1[0])**2 + (p2[1] - p1[1])**2)
   end
 
-  def self.from_sem_info(path, stage2world)
+  def self.from_sem_info(path, stage2world, opts = {})
     raise 'specify stage2world' unless stage2world
     h = Hash.new
     lines = textfile2array(path)
@@ -311,6 +315,10 @@ class ImageInfo
     locate = opencvtool.transform_points([center], :matrix => affine_image2world)[0]
     maginification = 12.0 * 10 * 1000 / width_on_world
     this = self.new(:name => h[:title], :locate => locate, :size => size, :center => center, :pixs => [h[:width_in_pix],h[:height_in_pix]])
+    if opts[:image_path]
+        this.image_path = opts[:image_path] 
+        this.image_dimensions = Dimensions.dimensions(opts[:image_path])
+    end
     this.set_affine(affine_image2world, :image2world)
     this.info_path = filepath_for(path, :ext => :vs)
     this.dump_info
@@ -494,9 +502,18 @@ class ImageInfo
     l = pixs[0]
     l = pixs[1] if pixs[1] > pixs[0]
     l = l.to_f
+    if image_dimensions
+      bottom_pix = image_dimensions[1] - pixs[1]
+      yyy = image_dimensions[1]/l/2.0*100
+      dy = bottom_pix/l/2.0*100
+    else
+      dy = 0
+    end
     xx = pixs[0]/l/2.0*100
     yy = pixs[1]/l/2.0*100
-    [[-xx,yy],[xx,yy],[xx,-yy],[-xx,-yy]]
+    ty = yy + dy
+    by = yy - dy
+    [[-xx,ty],[xx,ty],[xx,-by],[-xx,-by]]
   end
 
   def locate_on_world

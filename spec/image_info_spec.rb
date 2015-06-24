@@ -184,8 +184,44 @@ describe ImageInfo do
 		it "returns array of points" do
 			from_sem_info.corners_on_world.should be_an_instance_of(Array)
 		end
+	end
+
+	describe "#.corners_on_xy", :current => true do
+		let(:image_path) { 'tmp/chitech@002.tif'}
+		let(:txt_path) { 'tmp/chitech@002.txt'}
+		#let(:vs_path) { 'tmp/chitech@002.vs'}
+		#let(:dimension){ ImageInfo.image_dimension(image_path)}
+		let(:dimension){ [1280, 1024] }
+	 	let(:opencvtool) { OpenCvTool::OpenCvTool.new }		
+	 	let(:stage2vs) { opencvtool.Haffine_from_params(:angle => 10) }
+		let(:from_txt) { ImageInfo.from_txt(txt_path) }	
+		before(:each) do
+			setup_file(txt_path)
+			setup_file(image_path)
+		end
+
+		context "without image_path" do
+			let(:from_sem_info) { ImageInfo.from_sem_info(txt_path, stage2vs)}
+			it "returns array of points" do
+				corners_on_xy = from_sem_info.corners_on_xy
+				corners_on_xy[0].should be_eql([-50.0,37.5])
+				corners_on_xy[1].should be_eql([50.0,37.5])
+				corners_on_xy[2].should be_eql([50.0,-37.5])
+				corners_on_xy[3].should be_eql([-50.0,-37.5])
+			end
+		end
 
 
+		context "with image_path" do
+			let(:from_sem_info) { ImageInfo.from_sem_info(txt_path, stage2vs, :image_path => image_path)}
+			it "returns array of points" do
+				corners_on_xy = from_sem_info.corners_on_xy
+				corners_on_xy[0].should be_eql([-50.0,40.0])
+				corners_on_xy[1].should be_eql([50.0,40.0])
+				corners_on_xy[2].should be_eql([50.0,-35.0])
+				corners_on_xy[3].should be_eql([-50.0,-35.0])
+			end
+		end
 	end
 
 
