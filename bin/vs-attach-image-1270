@@ -36,8 +36,7 @@ HISTORY
   May 20, 2015: Add documentation
 
 DESCRIPTION
-  This program attaches upper view of Cameca's sample holder to
-  VisualStage.
+  Attach upper view of Cameca's sample holder to VisualStage 2007
 
   (1) Take a picture to locate 28-mm-phi Ta-ring to the center and fit
       the outline of the ring to full height of image.
