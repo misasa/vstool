@@ -26,9 +26,23 @@ Or install it yourself as:
 
     $ gem install vstool
 
+## Commands
+
+Commands are summarized as:
+
+| command              | description                                        | note |
+| -------------------- | -------------------------------------------------- | ---- |
+| vs-attach-image      | Attach image to VisualStage 2007                   |      |
+| vs-get-affine        | Obtain current Affine matrix from VisualStage 2007 |      |
+| vs-attach-image-1270 | attaches upper view of Cameca's sample holder      |      |
+
 ## Usage
 
-TODO: Write usage instructions here
+See online document:
+
+    $ vs-attach-image --help
+    $ vs-get-affine --help
+    $ vs-attach-image-1270 --help
 
 ## Contributing
 
