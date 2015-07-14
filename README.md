@@ -1,12 +1,17 @@
 # Vstool
 
-Command line tools for VisualStage and OpenCV
+Provide tools via gem that interact with VisualStage and OpenCV.
+Note that [OpenCV](http://opencv.org/) is image manuplating library for Python.
+
+## Dependency
+
+### [opencvtool](http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/opencvtool/tree/master "follow instruction")
+
+### [vs2007](http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/vs2007/tree/master "follow instruction")
+
 
 ## Installation
 
-    pip install git+http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/vs2007.git
-    pip install git+http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/opencvtool.git
-    
 Add this line to your application's Gemfile:
 
 ```ruby
