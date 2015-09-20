@@ -55,8 +55,8 @@ TK confirmed that vs-attach-image-1269 worked in image2 on September 20, 2015 wi
 following ".vs2007rc".
 
     $ cat ~/.vs2007rc
-    `---`
-    `vsdata_path: Z:\`
+    ---
+    vsdata_path: Z:\
 
 ## Contributing
 
