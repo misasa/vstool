@@ -36,8 +36,7 @@ HISTORY
   April 17, 2015: Add documentation
 
 DESCRIPTION
-  This program attaches upper view of Cameca's sample holder to
-  VisualStage.
+  Attach upper view of Cameca's sample holder to VisualStage 2007
 
   (1) Take a picture to locate 28-mm-phi Ta-ring to the center and fit
       the outline of the ring to height of image.
@@ -50,11 +49,11 @@ DESCRIPTION
 PREFERENCE FILE
   This program tries to locate VisualStage's datafile from
   |~/.vs2007rc|.  If the file is not found, it is created with default
-  configuration.  Revise it accordingly.  The initial file looks like
-  below.
+  configuration.  The configuration file should look like below.
+  Revise it accordingly.  You may not see backslash after colon.
 
   ---
-  vsdata_path: C:\VS2007data
+  vsdata_path: Z:\
 
 EXAMPLE
   $ cd ~/Dropbox/Downloads
