@@ -81,9 +81,8 @@ EOS
 end
 options.parse!
 
-# STDERR.puts "not implemented"
-# exit
-
+STDERR.puts "not implemented"
+exit
 if ARGV.size != 1
 	puts "usage: #{File.basename($0, '.*')} imagefile"
 	exit
