@@ -50,7 +50,7 @@ PREFERENCE FILE
   This program tries to locate VisualStage's datafile from
   |~/.vs2007rc|.  If the file is not found, it is created with default
   configuration.  Revise it accordingly.  The initial file looks like
-  below.
+  below.  You do not see but need back slash after colon.
 
   ---
   vsdata_path: C:\VS2007data
@@ -81,8 +81,9 @@ EOS
 end
 options.parse!
 
-STDERR.puts "not implemented"
-exit
+# STDERR.puts "not implemented"
+# exit
+
 if ARGV.size != 1
 	puts "usage: #{File.basename($0, '.*')} imagefile"
 	exit
