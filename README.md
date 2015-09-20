@@ -33,17 +33,30 @@ Commands are summarized as:
 
 | command              | description                                        | note |
 | -------------------- | -------------------------------------------------- | ---- |
+| loop-vs-attach-image | Keep attach image to VisualStage                   |      |
+| vs-add-file          | No description is available                        |      |
 | vs-attach-image      | Attach image to VisualStage 2007                   |      |
-| vs-get-affine        | Obtain current Affine matrix from VisualStage 2007 |      |
+| vs-attach-image-1269 | No description is available                        |      |
 | vs-attach-image-1270 | attaches upper view of Cameca's sample holder      |      |
+| vs-get-affine        | Obtain current Affine matrix from VisualStage 2007 |      |
 
 ## Usage
 
 See online document:
 
+    $ loop-vs-attach-image --help
+    $ vs-add-file --help
     $ vs-attach-image --help
-    $ vs-get-affine --help
+    $ vs-attach-image-1269 --help
     $ vs-attach-image-1270 --help
+    $ vs-get-affine --help
+
+TK confirmed that vs-attach-image-1269 worked in image2 on September 20, 2015 with
+following ".vs2007rc".
+
+    $ cat ~/.vs2007rc
+    `---`
+    `vsdata_path: Z:\`
 
 ## Contributing
 
