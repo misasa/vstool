@@ -51,9 +51,7 @@ See online document:
     $ vs-attach-image-1270 --help
     $ vs-get-affine --help
 
-TK confirmed that `vs-attach-image-1269` worked in image2 on September
-20, 2015 with following ".vs2007rc".  With the same configuration
-file, `vs-attach-image-1270` does not work.
+TK confirmed that `vs-attach-image-1269` worked in image2 on September 20, 2015 with following ".vs2007rc".  With the same configuration file, `vs-attach-image-1270` does not work.
 
     $ cat ~/.vs2007rc
     ---
