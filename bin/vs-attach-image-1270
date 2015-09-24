@@ -10,11 +10,11 @@ PrefFile = "~/.vs2007rc"
 # try to read config file
 base_path = "C:\\VS2007data"
 begin
-  puts "#{PrefFile} reading..."
+  puts "loading |#{PrefFile}|..."
   myconfigs      = YAML.load(File.read(File.expand_path(PrefFile)))
   base_path = myconfigs['vsdata_path']
- rescue
-  puts "In #{File.basename(__FILE__)}: fail to load a config file <#{PrefFile}>"
+rescue
+  puts "|#{File.basename(__FILE__)}|: fail to load config file |#{PrefFile}|"
   myconfigs		= {'vsdata_path' => base_path}
   open(File.expand_path(PrefFile), "w") do |f|
   	YAML.dump(myconfigs, f)
@@ -23,9 +23,9 @@ end
 
 params = {}
 options = OptionParser.new do |opts|
-	script_name = File.basename($0)
-	# opts.banner = "usage: #{script_name} [options] image-file"
-    opts.banner = <<"EOS"
+  script_name = File.basename($0)
+  # opts.banner = "usage: #{script_name} [options] image-file"
+  opts.banner = <<"EOS"
 NAME
   #{File.basename($0, '.*')} - Attach image of sample holder for 1270 to VisualStage
 
@@ -33,7 +33,8 @@ SYNOPSIS
   #{script_name} [options] imagefile
 
 HISTORY
-  May 20, 2015: Add documentation
+  May 20, 2015: Add documentation by TK
+  September 25, 2015: Review by TK and only indent was revised
 
 DESCRIPTION
   Attach upper view of Cameca's sample holder to VisualStage 2007
@@ -71,29 +72,32 @@ IMPLEMENTATION
 
 OPTIONS
 EOS
-	opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
-    	params[:verbose] = v
-  	end
- 	opts.on_tail("-h", "--help", "Show this message.") do |v|
-		puts opts
-		exit
-	end
+  opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+    params[:verbose] = v
+  end
+  opts.on_tail("-h", "--help", "Show this message.") do |v|
+	puts opts
+	exit
+  end
 end
 options.parse!
 
-STDERR.puts "not implemented"
-exit
+## Following two lines are introduced by someone, very likely for
+## debug purpose.  TK comment out on September 25, 2015
+# STDERR.puts "not implemented"
+# exit
+
 if ARGV.size != 1
-	puts "usage: #{File.basename($0, '.*')} imagefile"
-	exit
+  puts "usage: #{File.basename($0, '.*')} imagefile"
+  exit
 end
 
 imagefile = ARGV.shift
 imagefile_path = File.expand_path(imagefile)
 
 unless File.exists?(imagefile_path)
-	puts "#{imagefile_path} does not exist"
-	exit
+  puts "#{imagefile_path} does not exist"
+  exit
 end
 
 verbose = true
@@ -113,52 +117,52 @@ magnification = 120_000/width_in_um
 
 # VS opens a sample folder
 begin
-	@app.file_open(base_path,sample_name,"YES")
+  @app.file_open(base_path,sample_name,"YES")
 rescue
-	puts "In #{File.basename(__FILE__)}: fail to open #{File.join(base_path, sample_name)}"
-	puts "creating #{File.join(base_path, sample_name)}..."
-	@app.file_new(base_path,sample_name,"YES")
-	exit
+  puts "In #{File.basename(__FILE__)}: fail to open #{File.join(base_path, sample_name)}"
+  puts "creating #{File.join(base_path, sample_name)}..."
+  @app.file_new(base_path,sample_name,"YES")
+  exit
 end
 
 point_no = 0
 begin
-	@app.set_select_address(point_no)
+  @app.set_select_address(point_no)
 rescue
-	@app.add_address()
-	@app.set_address_name(point_name)
-	@app.set_address_locate(0,0)
-	exit
+  @app.add_address()
+  @app.set_address_name(point_name)
+  @app.set_address_locate(0,0)
+  exit
 end
 
 begin
-	imagefile_path = @app.cygpath(imagefile_path, "w") if RUBY_PLATFORM.downcase =~ /cygwin/
-	vargs = @app.add_attach_file(imagefile_path)
-	attach_no = vargs[0].to_i
-	@app.set_select_attach(attach_no, "TRUE")
-	# Name
-	@app.set_attach_name(attach_no, attach_name)
+  imagefile_path = @app.cygpath(imagefile_path, "w") if RUBY_PLATFORM.downcase =~ /cygwin/
+  vargs = @app.add_attach_file(imagefile_path)
+  attach_no = vargs[0].to_i
+  @app.set_select_attach(attach_no, "TRUE")
+  # Name
+  @app.set_attach_name(attach_no, attach_name)
 
-	# Locate (  0,   0)
-	@app.set_attach_locate(attach_no, 0.0, 0.0)
-	puts sprintf("Locate ( %.3f, %.3f)",0,0) if verbose
+  # Locate (  0,   0)
+  @app.set_attach_locate(attach_no, 0.0, 0.0)
+  puts sprintf("Locate ( %.3f, %.3f)",0,0) if verbose
 
-	# Center
-	center_x += point_no * 1000
-	@app.set_attach_center(attach_no, center_x, center_y)	
-	puts sprintf("Center ( %.3f, %.3f)",center_x,center_y) if verbose
+  # Center
+  center_x += point_no * 1000
+  @app.set_attach_center(attach_no, center_x, center_y)	
+  puts sprintf("Center ( %.3f, %.3f)",center_x,center_y) if verbose
 
-	# SIZE
-	@app.set_attach_size(attach_no, width_in_um, height_in_um)
-	puts sprintf("Size ( %.3f, %.3f)",width_in_um,height_in_um) if verbose
+  # SIZE
+  @app.set_attach_size(attach_no, width_in_um, height_in_um)
+  puts sprintf("Size ( %.3f, %.3f)",width_in_um,height_in_um) if verbose
 
-	# Magnification
-	@app.set_attach_imag(attach_no, magnification)
-	puts sprintf("Magnification %.3f", magnification) if verbose
+  # Magnification
+  @app.set_attach_imag(attach_no, magnification)
+  puts sprintf("Magnification %.3f", magnification) if verbose
 
-	# Background
-	#@app.set_select_bg_image(-1)	
-	@app.set_select_bg_image(attach_no)
+  # Background
+  #@app.set_select_bg_image(-1)	
+  @app.set_select_bg_image(attach_no)
 rescue =>  ex
-	puts ex
+  puts ex
 end
