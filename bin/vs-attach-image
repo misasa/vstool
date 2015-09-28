@@ -7,7 +7,8 @@ require 'vstool'
 PrefFile = "~/.vs2007rc"
 
 # try to read config file
-base_path = "C:\\VS2007data"
+# base_path = "C:\\VS2007data"
+base_path = "Z:\\"
 begin
   myconfigs      = YAML.load(File.read(File.expand_path(PrefFile)))
   base_path = myconfigs['vsdata_path']
