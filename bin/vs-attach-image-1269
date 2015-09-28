@@ -24,6 +24,7 @@ end
 params = {}
 options = OptionParser.new do |opts|
   script_name = File.basename($0)
+  # opts.banner = "usage: #{script_name} [options] imagefile"
   opts.banner = <<"EOS"
 NAME
   #{File.basename($0, '.*')} - Attach image of sample holder for 1270 to VisualStage
@@ -34,6 +35,7 @@ SYNOPSIS
 HISTORY
   April 10, 2015: Rename image2sims to #{File.basename($0, '.*')}
   April 17, 2015: Add documentation by TK
+  May 20, 2015: Add documentation by TK
   September 25, 2015: Review by TK and only indent was revised
 
 DESCRIPTION
@@ -50,11 +52,16 @@ DESCRIPTION
 PREFERENCE FILE
   This program tries to locate VisualStage's datafile from
   |~/.vs2007rc|.  If the file is not found, it is created with default
-  configuration.  The configuration file should look like below.
-  Revise it accordingly.  You may not see backslash after colon.
+  configuration.  The configuration file should look like one of below
+  lines depending on if VS2007data is mounted on Windows as Z drive or
+  exists as local directory.  Revise it accordingly.  You may not see
+  backslash after colon.
 
   ---
   vsdata_path: Z:\
+
+  ---
+  vsdata_path: C:\VS2007data
 
 EXAMPLE
   $ cd ~/Dropbox/Downloads
@@ -67,7 +74,7 @@ SEE ALSO
   http://dream.misasa.okayama-u.ac.jp
 
 IMPLEMENTATION
-  Copyright (c) 2014 ISEI, Okayama University
+  Copyright (c) 2015 ISEI, Okayama University
   Licensed under the same terms as Ruby
 
 OPTIONS
@@ -108,7 +115,7 @@ height_in_um = h0
 magnification = 120_000/width_in_um
 
 
-#@app = VS2007API.new({:verbose => verbose})
+# @app = VS2007API.new({:verbose => verbose})
 @app = VisualStage::VS2007API.new({:verbose => verbose})
 
 

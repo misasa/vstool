@@ -24,7 +24,7 @@ end
 params = {}
 options = OptionParser.new do |opts|
   script_name = File.basename($0)
-  # opts.banner = "usage: #{script_name} [options] image-file"
+  # opts.banner = "usage: #{script_name} [options] imagefile"
   opts.banner = <<"EOS"
 NAME
   #{File.basename($0, '.*')} - Attach image of sample holder for 1270 to VisualStage
@@ -33,6 +33,8 @@ SYNOPSIS
   #{script_name} [options] imagefile
 
 HISTORY
+  April 10, 2015: Rename image2sims to #{File.basename($0, '.*')}
+  April 17, 2015: Add documentation by TK
   May 20, 2015: Add documentation by TK
   September 25, 2015: Review by TK and only indent was revised
 
@@ -50,8 +52,13 @@ DESCRIPTION
 PREFERENCE FILE
   This program tries to locate VisualStage's datafile from
   |~/.vs2007rc|.  If the file is not found, it is created with default
-  configuration.  The configuration file should look like below.
-  Revise it accordingly.  You may not see backslash after colon.
+  configuration.  The configuration file should look like one of below
+  lines depending on if VS2007data is mounted on Windows as Z drive or
+  exists as local directory.  Revise it accordingly.  You may not see
+  backslash after colon.
+
+  ---
+  vsdata_path: Z:\
 
   ---
   vsdata_path: C:\VS2007data
@@ -82,10 +89,6 @@ EOS
 end
 options.parse!
 
-## Following two lines are introduced by someone, very likely for
-## debug purpose.  TK comment out on September 25, 2015
-# STDERR.puts "not implemented"
-# exit
 
 if ARGV.size != 1
   puts "usage: #{File.basename($0, '.*')} imagefile"
@@ -112,6 +115,7 @@ height_in_um = h0
 magnification = 120_000/width_in_um
 
 
+# @app = VS2007API.new({:verbose => verbose})
 @app = VisualStage::VS2007API.new({:verbose => verbose})
 
 
