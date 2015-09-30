@@ -1,16 +1,16 @@
-# Vstool
+# vstool
 
 Provide tools via gem that interact with VisualStage and OpenCV.
 Note that [OpenCV](http://opencv.org/) is image manuplating library for Python.
 
-## Dependency
+# Dependency
 
-### [opencvtool](http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/opencvtool/tree/master "follow instruction")
+## [opencvtool](http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/opencvtool/tree/master "follow instruction")
 
-### [vs2007](http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/vs2007/tree/master "follow instruction")
+## [vs2007](http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/vs2007/tree/master "follow instruction")
 
 
-## Installation
+# Installation
 
 Add this line to your application's Gemfile:
 
@@ -27,7 +27,7 @@ Or install it yourself as:
     $ gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems
     $ gem install vstool
 
-## Commands
+# Commands
 
 Commands are summarized as:
 
@@ -40,7 +40,7 @@ Commands are summarized as:
 | vs-attach-image-1270 | Attach upper view of Cameca's sample holder to VisualStage 2007      |      |
 | vs-get-affine        | Obtain current Affine matrix from VisualStage 2007                   |      |
 
-## Usage
+# Usage
 
 See online document:
 
@@ -51,7 +51,7 @@ See online document:
     $ vs-attach-image-1270 --help
     $ vs-get-affine --help
 
-## Contributing
+# Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/vstool/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
