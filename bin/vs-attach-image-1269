@@ -48,7 +48,7 @@ DESCRIPTION
   (2) Launch VisualStage 2007.
 
   (3) Launch #{script_name} with imagefile as argument.  The image
-      will be stored to sample`image2sims' in VisualStage 2007.
+      will be stored to sample `image2sims' in VisualStage 2007.
 
 PREFERENCE FILE
   This program tries to locate VisualStage's datafile from
