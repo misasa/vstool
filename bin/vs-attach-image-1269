@@ -34,10 +34,11 @@ SYNOPSIS
   #{script_name} [options] imagefile
 
 HISTORY
-  April 10, 2015: Rename image2sims to #{File.basename($0, '.*')}
+  April 10, 2015: Rename name of program from image2sims to #{File.basename($0, '.*')}
   April 17, 2015: Add documentation by TK
   May 20, 2015: Add documentation by TK
   September 25, 2015: Review by TK and only indent was revised
+  January 20, 2016: Improve help
 
 DESCRIPTION
   Attach upper view of Cameca's sample holder to VisualStage 2007
@@ -45,7 +46,8 @@ DESCRIPTION
   (1) Take a picture to locate 28-mm-phi Ta-ring to the center and fit
       the outline of the ring to full height of image.
 
-  (2) Launch VisualStage 2007.
+  (2) Launch VisualStage 2007.  Make sure if stage correctly aligned.
+      If not, initialize alignment.
 
   (3) Launch #{script_name} with imagefile as argument.  The image
       will be stored to sample `image2sims' in VisualStage 2007.
