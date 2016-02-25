@@ -64,6 +64,10 @@ EOS
     	params[:format] = t
   	end
 
+ 	opts.on("-n", "--data-name", "Output data-name") do |v|
+     	params[:data_name] = v
+   	end
+
   	# opts.on("-o", "--output-file output-file", "Specify output file") do |v|
    #  	params[:output_file] = v
   	# end 
@@ -87,6 +91,7 @@ io = STDOUT
 
 case params[:format]
 	when :yaml
+		h[:affine_dev2vs] = h if params[:data_name]
 		io.puts h.to_yaml
 	else
 		io.puts h.to_str
