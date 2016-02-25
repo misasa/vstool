@@ -93,7 +93,7 @@ case params[:format]
 	when :yaml
 		hh = Hash.new
 		if params[:data_name]
-			hh[:affine_dev2vs] = h
+			hh["affine_dev2vs"] = h
 		else
 			hh = h
 		end
