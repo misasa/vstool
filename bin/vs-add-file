@@ -27,13 +27,13 @@ params = {}
 # 	# opts.banner = "usage: #{script_name} [options] file"
 #     opts.banner = <<"EOS"
 # NAME
-#   #{File.basename($0, '.*')} - Attach image to VisualStage without manipulation
+#   #{File.basename($0, '.*')} - Upload image to VisualStage without manipulation
 #
 # SYNOPSIS
 #   #{script_name} [options] imagefile
 #
 # DESCRIPTION
-#   Attach image to VisualStage without manipulation.  You need to
+#   Upload image to VisualStage without manipulation.  You need to
 #   have a set of image and image-info file.  The image-info file is
 #   created by JEOL JSM-7001F or JSM-8530F.  See `vs-attach-image' for
 #   full operation including manipulation and attachment.

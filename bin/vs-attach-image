@@ -24,14 +24,14 @@ options = OptionParser.new do |opts|
 	script_name = File.basename($0)
     opts.banner = <<"EOS"
 NAME
-  #{File.basename($0, '.*')} - Attach image to VisualStage 2007
+  #{File.basename($0, '.*')} - Upload image to VisualStage 2007
 
 SYNOPSIS
   #{script_name} [options] imagefile
 
 DESCRIPTION
-  Attach image to VisualStage 2007.  You need to have a set of image
-  and image-info file.  The image-info file is created by JEOL
+  Upload image to VisualStage 2007.  You need to have a pair of image
+  and image-info files.  The image-info file is created by JEOL
   JSM-7001F or JSM-8530F.  Three processes are involved.  Only JPG and
   TIF are supported.  Use `loop-vs-attach-image' to attach images
   automatically in certain folder.

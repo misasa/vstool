@@ -68,12 +68,12 @@ Commands are summarized as:
 
 | command              | description                                                          | note |
 | -------------------- | -------------------------------------------------------------------- | ---- |
-| loop-vs-attach-image | Keep attach image to VisualStage                                     |      |
+| loop-vs-attach-image | Keep attaching image to VisualStage                                  |      |
 | vs-add-file          | No description is available                                          |      |
-| vs-attach-image      | Attach image to VisualStage 2007                                     |      |
-| vs-attach-image-1269 | Attach upper view of Cameca's sample holder to VisualStage 2007      |      |
-| vs-attach-image-1270 | Attach upper view of Cameca's sample holder to VisualStage 2007      |      |
-| vs-get-affine        | Obtain current Affine matrix from VisualStage 2007                   |      |
+| vs-attach-image      | Upload image to VisualStage 2007                                     |      |
+| vs-attach-image-1269 | Upload upper view of Cameca's sample holder to VisualStage 2007      |      |
+| vs-attach-image-1270 | Upload upper view of Cameca's sample holder to VisualStage 2007      |      |
+| vs-get-affine        | Return current Affine matrix from VisualStage 2007                   |      |
 
 # Usage
 

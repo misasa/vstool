@@ -28,13 +28,13 @@ options = OptionParser.new do |opts|
 	# opts.banner = "usage: #{script_name} [options] file ..."
     opts.banner = <<"EOS"
 NAME
-  vs-get-affine - Obtain current Affine matrix from VisualStage 2007
+  vs-get-affine - Return current Affine matrix from VisualStage 2007
 
 SYNOPSIS AND USAGE
   vs-get-affine [options]
 
 DESCRIPTION
-  Obtain current Affine matrix from VisualStage 2007.  This script
+  Return current Affine matrix from VisualStage 2007.  This script
   talks to VisualStage 2007 and writes out the current Affine matrix
   in Matlab format to standard out.
 
