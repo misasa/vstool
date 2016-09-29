@@ -31,7 +31,7 @@ Note that [OpenCV](http://opencv.org/) is image manuplating library for Python.
     DOS> vs start
     DOS> vs-api -h
     DOS> vs-api TEST_CMD
-    DOS> gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems
+    DOS> gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
     DOS> gem install vstool
     DOS> vs-attach-image -h
 `
@@ -40,7 +40,7 @@ Note that [OpenCV](http://opencv.org/) is image manuplating library for Python.
 
 `
 
-    cygwin> gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems
+    cygwin> gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
     cygwin> gem install vstool
     cygwin> vs-attach-image -h
 `
@@ -59,7 +59,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems
+    $ gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
     $ gem install vstool
 
 # Commands
