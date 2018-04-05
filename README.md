@@ -5,35 +5,35 @@ Note that [OpenCV](http://opencv.org/) is image manuplating library for Python.
 
 # Dependency
 
-## [opencvtool](http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/opencvtool/tree/master "follow instruction")
+## [python package -- opencvtool](http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/opencvtool/tree/master "follow instruction")
 
-## [vs2007](http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/vs2007/tree/master "follow instruction")
+## [python package -- vs2007](http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/vs2007/tree/master "follow instruction")
 
 # Setup
 
-- Download python 2.7 from https://www.python.org/downloads/ and install it
+- Download python 2.7 from https://www.python.org/downloads/ and install it.
 
-- Append ;C:\Python27;C:\Python27\Scripts to the %PATH% variable
+- Append `;C:\Python27;C:\Python27\Scripts` to the %PATH% variable.
 
-- Download numpy (numpy-1.9.2-win32-superpack-python2.7.exe) from http://sourceforge.net/projects/numpy/files/NumPy/ and install it
+- Download numpy (numpy-1.9.2-win32-superpack-python2.7.exe) from http://sourceforge.net/projects/numpy/files/NumPy/ and install it.
 
-- Download OpenCV (opencv-2.4.11.exe) from http://sourceforge.net/projects/opencvlibrary/files/opencv-win/2.4.11/ and install it into C:\
+- Download OpenCV (opencv-2.4.11.exe) from http://sourceforge.net/projects/opencvlibrary/files/opencv-win/2.4.11/ and install it into `C:\`.
 
-- Run Command Prompt as Administrator
+- Run Command Prompt as Administrator.
 
 `
 
-    DOS> copy C:\opencv\build\python\2.7\x86\cv2.pyd C:\Python27\Lib\site-packages
-    DOS> pip install git+http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/opencvtool.git
-    DOS> Haffine_from_params -h
-    DOS> pip install git+http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/vs2007.git
-    DOS> vs -h
-    DOS> vs start
-    DOS> vs-api -h
-    DOS> vs-api TEST_CMD
-    DOS> gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
-    DOS> gem install vstool
-    DOS> vs-attach-image -h
+    CMD> copy C:\opencv\build\python\2.7\x86\cv2.pyd C:\Python27\Lib\site-packages
+    CMD> pip install git+http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/opencvtool.git
+    CMD> Haffine_from_params -h
+    CMD> pip install git+http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/vs2007.git
+    CMD> vs -h
+    CMD> vs start
+    CMD> vs-api -h
+    CMD> vs-api TEST_CMD
+    CMD> gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
+    CMD> gem install vstool
+    CMD> vs-attach-image -h
 `
 
 - It also works in CYGWIN
@@ -47,17 +47,7 @@ Note that [OpenCV](http://opencv.org/) is image manuplating library for Python.
 
 # Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'vstool'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+Install it yourself as:
 
     $ gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
     $ gem install vstool
