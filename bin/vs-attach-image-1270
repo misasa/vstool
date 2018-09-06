@@ -47,7 +47,8 @@ DESCRIPTION
       the outline of the ring to full height of image.
 
   (2) Launch VisualStage 2007.  Make sure if stage correctly aligned.
-      If not, initialize alignment.
+      If not, initialize alignment.  Set default magnification for
+      an image attachment to be 3.
 
   (3) Launch #{script_name} with imagefile as argument.  The image
       will be stored to sample `image2sims' in VisualStage 2007.
@@ -77,7 +78,7 @@ SEE ALSO
   http://dream.misasa.okayama-u.ac.jp
 
 IMPLEMENTATION
-  Copyright (c) 2015 ISEI, Okayama University
+  Copyright (c) 2015-2018 ISEI, Okayama University
   Licensed under the same terms as Ruby
 
 OPTIONS
