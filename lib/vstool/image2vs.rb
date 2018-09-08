@@ -51,7 +51,7 @@ module Vstool
 			   	end
 				# opts.on("-c", "--[no-]clear", "Clear") do |v|
 			 #    	@clear = v
-			 #  	end			  	
+			 #  	end
 			 	opts.on_tail("-h", "--help", "Show this message.") do |v|
 					@stderr.puts opts.to_s
 					exit
@@ -101,11 +101,11 @@ module Vstool
 			tmp_dir = "deleteme.d"
 			cropped_dir = File.join(tmp_dir, "@crop")
 			cropped_image = filepath_for(imagefile, :insert_path => cropped_dir)
-			cropped_image_info_file = filepath_for(imagefile, :ext => :vs, :insert_path => cropped_dir)			
+			cropped_image_info_file = filepath_for(imagefile, :ext => :vs, :insert_path => cropped_dir)
 
 			vs_dir = File.join(tmp_dir, "@crop@spin")
 			vs_image = filepath_for(imagefile, :insert_path => vs_dir)
-			vs_image_info_file = filepath_for(imagefile, :ext => :vs, :insert_path => vs_dir)			
+			vs_image_info_file = filepath_for(imagefile, :ext => :vs, :insert_path => vs_dir)
 
 			raise "#{imagefile_path} does not exist" unless File.exists?(imagefile_path)
 
@@ -128,10 +128,10 @@ module Vstool
 			unless File.exists?(cropped_image) && File.exists?(cropped_image_info_file)
 			# 	@output.puts "#{cropped_image} exists..."
 			# 	@output.puts "#{cropped_image_info_file} exists..."
-			# 	cropped_image_info = ImageInfo.from_file(cropped_image_info_file)				
+			# 	cropped_image_info = ImageInfo.from_file(cropped_image_info_file)
 			# else
 				@output.puts "generating |#{cropped_image}|..."
-				raise "#{image_info_file} does not exsit" unless File.exists?(image_info_file)				
+				raise "#{image_info_file} does not exsit" unless File.exists?(image_info_file)
 				image_info = ImageInfo.load(imagefile)
 				cropped_image_info = image_info.crop(:path => cropped_image)
 			end
@@ -150,7 +150,7 @@ module Vstool
 			if VisualStage::Base.current?
 				begin
 					config_path = File.join(File.join(dirname,tmp_dir),'image2vs.config')
-					#@output.puts "loading |#{File.expand_path(config_path)}|..."					
+					#@output.puts "loading |#{File.expand_path(config_path)}|..."
 				  	myconfigs      = YAML.load(File.read(File.expand_path(config_path)))
 				  	vsdata_path = myconfigs['vsdata_path']
 				rescue
@@ -166,7 +166,7 @@ module Vstool
 						myconfigs[:vsdata_path] = VisualStage::Base.data_dir
 						open(File.expand_path(config_path), "w") do |f|
 							YAML.dump(myconfigs, f)
-						end					
+						end
 					end
 				end
 				VisualStage::Base.refresh if VisualStage::Base.data_dir

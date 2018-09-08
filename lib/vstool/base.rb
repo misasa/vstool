@@ -7,8 +7,8 @@ module Vstool
 
 	  	def opencvtool
 	    	self.class.opencvtool
-	  	end		
-	  	
+	  	end
+
 		def self.option
 			opt = OptionParser.new
 			opt.on('-a'){|v| p v}
@@ -126,7 +126,7 @@ module Vstool
 			size = [ x_range[1] - x_range[0], y_range[1] - y_range[0] ]
 			center = [ size[0]/2, size[1]/2 ]
 			pixs = size.map{|v| (v * pixels_per_um).ceil }
-			vs_image_info = ImageInfo.new(:name => name, :locate => locate, :center => center, :size => size, :pixs => pixs)    		
+			vs_image_info = ImageInfo.new(:name => name, :locate => locate, :center => center, :size => size, :pixs => pixs)
 			return vs_image_info
 		end
 
@@ -160,7 +160,7 @@ module Vstool
 			vs2007api.attach_file(image_path, params)
 
 			vs2007api.attach_file(image_info_path, :name => params[:name] + '-info') if opts[:image_info_path]
-			vs2007api.file_save()		
+			vs2007api.file_save()
 		end
 
 		def vs_create_address_and_attach_image_file(vs2007api, image_path, opts = {})
@@ -177,9 +177,9 @@ module Vstool
 			params[:name] = opts[:name] if opts[:name]
 			# params[:background] = opts[:background] || false
 			vs2007api.create_address(params)
-			vs_attach_image_file(vs2007api, image_path, opts)	
+			vs_attach_image_file(vs2007api, image_path, opts)
 			# vs2007api.attach_file(image_path, params)
-			# vs2007api.attach_file(image_info_path, :name => 'image-info')		
+			# vs2007api.attach_file(image_info_path, :name => 'image-info')
 			# vs2007api.file_save()
 		end
 	end
