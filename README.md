@@ -7,7 +7,7 @@ Note that [OpenCV](http://opencv.org/) is image manuplating library for Python.
 
 ## [python package -- ImageMosaic](https://github.com/misasa/image_mosaic "follow instruction")
 
-## [python package -- vs2007](http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/vs2007/tree/master "follow instruction")
+## [python package -- vs2007](http://babel.misasa.okayama-u.ac.jp/pythonpackage/vs2007/tree/master "follow instruction")
 
 # Setup
 
@@ -21,8 +21,6 @@ Note that [OpenCV](http://opencv.org/) is image manuplating library for Python.
 
 - Run Command Prompt as Administrator.
 
-`
-
     CMD> copy C:\opencv\build\python\2.7\x86\cv2.pyd C:\Python27\Lib\site-packages
     CMD> pip install git+http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/opencvtool.git
     CMD> Haffine_from_params -h
@@ -34,16 +32,12 @@ Note that [OpenCV](http://opencv.org/) is image manuplating library for Python.
     CMD> gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
     CMD> gem install vstool
     CMD> vs-attach-image -h
-`
 
 - It also works in CYGWIN
-
-`
 
     cygwin> gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
     cygwin> gem install vstool
     cygwin> vs-attach-image -h
-`
 
 # Installation
 
