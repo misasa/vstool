@@ -21,23 +21,19 @@ Note that [OpenCV](http://opencv.org/) is image manuplating library for Python.
 
 - Run Command Prompt as Administrator.
 
-    CMD> copy C:\opencv\build\python\2.7\x86\cv2.pyd C:\Python27\Lib\site-packages
-    CMD> pip install git+http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/opencvtool.git
-    CMD> Haffine_from_params -h
-    CMD> pip install git+http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/vs2007.git
-    CMD> vs -h
-    CMD> vs start
-    CMD> vs-api -h
-    CMD> vs-api TEST_CMD
-    CMD> gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
-    CMD> gem install vstool
-    CMD> vs-attach-image -h
-
-- It also works in CYGWIN
-
-    cygwin> gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
-    cygwin> gem install vstool
-    cygwin> vs-attach-image -h
+`
+    Admin.CMD> copy C:\opencv\build\python\2.7\x86\cv2.pyd C:\Python27\Lib\site-packages
+    Admin.CMD> pip install git+http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/opencvtool.git
+    Admin.CMD> Haffine_from_params -h
+    Admin.CMD> pip install git+http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/vs2007.git
+    Admin.CMD> vs -h
+    Admin.CMD> vs start
+    Admin.CMD> vs-api -h
+    Admin.CMD> vs-api TEST_CMD
+    Admin.CMD> gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
+    Admin.CMD> gem install vstool
+    Admin.CMD> vs-attach-image -h
+`
 
 # Installation
 
