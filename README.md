@@ -1,7 +1,9 @@
 # vstool
 
-Provide tools via gem that interact with VisualStage and OpenCV.
-Note that [OpenCV](http://opencv.org/) is image manuplating library for Python.
+A series of VisualStage 2007 related utilities.  Obtain stage
+coordinate from VisualStage 2007, convert the image to fit to the
+coordinate, and attach the image to VisualStage 2007.
+
 
 # Dependency
 
@@ -9,38 +11,23 @@ Note that [OpenCV](http://opencv.org/) is image manuplating library for Python.
 
 ## [python package -- vs2007](http://babel.misasa.okayama-u.ac.jp/pythonpackage/vs2007/tree/master "follow instruction")
 
-# Setup
-
-- Download python 2.7 from https://www.python.org/downloads/ and install it.
-
-- Append `;C:\Python27;C:\Python27\Scripts` to the %PATH% variable.
-
-- Download numpy (numpy-1.9.2-win32-superpack-python2.7.exe) from http://sourceforge.net/projects/numpy/files/NumPy/ and install it.
-
-- Download OpenCV (opencv-2.4.11.exe) from http://sourceforge.net/projects/opencvlibrary/files/opencv-win/2.4.11/ and install it into `C:\`.
-
-- Run Command Prompt as Administrator.
-
-`
-    Admin.CMD> copy C:\opencv\build\python\2.7\x86\cv2.pyd C:\Python27\Lib\site-packages
-    Admin.CMD> pip install git+http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/opencvtool.git
-    Admin.CMD> Haffine_from_params -h
-    Admin.CMD> pip install git+http://devel.misasa.okayama-u.ac.jp/gitlab/pythonpackage/vs2007.git
-    Admin.CMD> vs -h
-    Admin.CMD> vs start
-    Admin.CMD> vs-api -h
-    Admin.CMD> vs-api TEST_CMD
-    Admin.CMD> gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
-    Admin.CMD> gem install vstool
-    Admin.CMD> vs-attach-image -h
-`
-
 # Installation
 
-Install it yourself as:
+- Install Python 2.7 and `python package -- vs2007`.
 
-    $ gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
-    $ gem install vstool
+`
+
+    ADMIN.CMD> pip install git+https://babel.misasa.okayama-u.ac.jp/pythonpackage/vs2007.git
+`
+
+- Install this gem package.
+
+`
+
+    CMD> gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
+    CMD> gem install vstool
+    CMD> vs-attach-image -h
+`
 
 # Commands
 
