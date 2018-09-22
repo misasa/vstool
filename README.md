@@ -1,4 +1,4 @@
-# vstool
+# gem package -- vstool
 
 A series of VisualStage 2007 related utilities.  Obtain stage
 coordinate from VisualStage 2007, convert the image to fit to the
@@ -13,7 +13,7 @@ coordinate, and attach the image to VisualStage 2007.
 
 # Installation
 
-- Install Python 2.7 and `python package -- vs2007`.
+- Install `python package -- vs2007`.
 
 `
 
