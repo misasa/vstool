@@ -13,13 +13,6 @@ coordinate, and attach the image to `VisualStage 2007`.
 
 # Installation
 
-- Install `python package -- vs2007`.
-
-`
-
-    ADMIN.CMD> pip install git+https://gitlab.misasa.okayama-u.ac.jp/pythonpackage/vs2007.git
-`
-
 - Install this gem package.
 
 `
