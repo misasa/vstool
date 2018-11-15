@@ -13,8 +13,6 @@ coordinate, and attach the image to `VisualStage 2007`.
 
 # Installation
 
-- Install this gem package.
-
     $ gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
     $ gem install vstool
     $ vs-attach-image -h
