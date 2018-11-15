@@ -1,8 +1,8 @@
 # gem package -- vstool
 
-A series of VisualStage 2007 related utilities.  Obtain stage
-coordinate from VisualStage 2007, convert the image to fit to the
-coordinate, and attach the image to VisualStage 2007.
+A series of `VisualStage 2007` related utilities.  Obtain stage
+coordinate from `VisualStage 2007`, convert the image to fit to the
+coordinate, and attach the image to `VisualStage 2007`.
 
 
 # Dependency
