@@ -40,11 +40,3 @@ See online document:
     $ vs-attach-image-1269 --help
     $ vs-attach-image-1270 --help
     $ vs-get-affine --help
-
-# Contributing
-
-1. Fork it ( https://github.com/[my-github-username]/vstool/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
