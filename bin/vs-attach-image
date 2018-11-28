@@ -71,7 +71,7 @@ EXAMPLE
   deleteme.d/@crop@spin/tt_grt_bcg12@39.txt
 
 SEE ALSO
-  http://dream.misasa.okayama-u.ac.jp
+  https://gitlab.misasa.okayama-u.ac.jp/gems/vstool
   loop-vs-attach-image
   vs-add-file
   vs-get-affine
