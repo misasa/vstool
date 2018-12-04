@@ -7,7 +7,7 @@ coordinate, and attach the image to `VisualStage 2007`.
 
 # Dependency
 
-## [python package -- ImageMosaic](https://github.com/misasa/image_mosaic)
+## [python package -- image_mosaic](https://github.com/misasa/image_mosaic)
 
 ## [python package -- vs2007](https://gitlab.misasa.okayama-u.ac.jp/pythonpackage/vs2007/tree/master)
 
