@@ -13,8 +13,6 @@ coordinate, and attach the image to `VisualStage 2007`.
 
 ## [python package -- image_mosaic](https://github.com/misasa/image_mosaic)
 
-## [python package -- vs2007](https://gitlab.misasa.okayama-u.ac.jp/pythonpackage/vs2007/tree/master)
-
 # Installation
 
     CMD> gem source -a http://dream.misasa.okayama-u.ac.jp/rubygems/
