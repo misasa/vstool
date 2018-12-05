@@ -9,6 +9,8 @@ coordinate, and attach the image to `VisualStage 2007`.
 
 ## [gem package -- opencvtool](https://gitlab.misasa.okayama-u.ac.jp/gems/opencvtool)
 
+## [gem package -- visual_stage](https://gitlab.misasa.okayama-u.ac.jp/gems/visual_stage)
+
 ## [python package -- image_mosaic](https://github.com/misasa/image_mosaic)
 
 ## [python package -- vs2007](https://gitlab.misasa.okayama-u.ac.jp/pythonpackage/vs2007/tree/master)
