@@ -7,6 +7,8 @@ coordinate, and attach the image to `VisualStage 2007`.
 
 # Dependency
 
+## [gem package -- opencvtool](https://gitlab.misasa.okayama-u.ac.jp/gems/opencvtool)
+
 ## [python package -- image_mosaic](https://github.com/misasa/image_mosaic)
 
 ## [python package -- vs2007](https://gitlab.misasa.okayama-u.ac.jp/pythonpackage/vs2007/tree/master)
