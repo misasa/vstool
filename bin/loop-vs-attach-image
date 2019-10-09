@@ -21,16 +21,17 @@ options = OptionParser.new do |opts|
 	script_name = File.basename($0)
     opts.banner = <<"EOS"
 NAME
-  #{File.basename($0, '.*')} - Keep attach image to VisualStage
+  #{File.basename($0, '.*')} - Automatically attach images obtained by SEM to VisualStage 2007
 
 SYNOPSIS
   #{script_name} [options]
 
 DESCRIPTION
-  Keep attaching image to VisualStage.  This command is daemon for
-  `vs-attach-image'.  This monitors any new images on current working
-  directory and invoke `vs-attach-image'.  First make sure if
-  `vs-attach-image' works.  Then issue this command without argument.
+  Automatically attach images obtained by SEM to VisualStage 2007.
+  This command is daemon for `vs-attach-image'.  This monitors any new
+  images on current working directory and invoke `vs-attach-image'.
+  First make sure if `vs-attach-image' works.  Then issue this command
+  without argument.
 
 EXAMPLE
   $ cd /cygdrive/y/tatsukix/BCG12/2015-05-18

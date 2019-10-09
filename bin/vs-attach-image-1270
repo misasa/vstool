@@ -28,7 +28,7 @@ options = OptionParser.new do |opts|
   # opts.banner = "usage: #{script_name} [options] imagefile"
   opts.banner = <<"EOS"
 NAME
-  #{File.basename($0, '.*')} - Upload image of sample holder for 1270 to VisualStage
+  #{File.basename($0, '.*')} - Copy image of sample holder for 1270 to VisualStage
 
 SYNOPSIS
   #{script_name} [options] imagefile
@@ -41,7 +41,7 @@ HISTORY
   January 20, 2016: Improve help
 
 DESCRIPTION
-  Upload upper view of Cameca's sample holder to VisualStage 2007
+  Copy upper view of Cameca's sample holder to VisualStage 2007.
 
   (1) Take a picture to locate 28-mm-phi Ta-ring to the center and fit
       the outline of the ring to full height of image.

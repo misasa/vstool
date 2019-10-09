@@ -24,37 +24,40 @@ options = OptionParser.new do |opts|
 	script_name = File.basename($0)
     opts.banner = <<"EOS"
 NAME
-  #{File.basename($0, '.*')} - Upload image to VisualStage 2007
+  #{File.basename($0, '.*')} - Copy image to VisualStage 2007
 
 SYNOPSIS
   #{script_name} [options] imagefile
 
 DESCRIPTION
-  Upload image to VisualStage 2007.  You need to have a pair of image
-  and image-info files.  The image-info file is created by JEOL
-  JSM-7001F or JSM-8530F.  Three processes are involved.  Only JPG and
-  TIF are supported.  Use `loop-vs-attach-image' to attach images
-  automatically in certain folder.
+  Copy image to VisualStage 2007.  You need to have a pair of image
+  file and image-info file.  The image-info file is created by JEOL
+  JSM-7001F or JSM-8530F and is also referred as imajeoletry file.
+  Three processes are involved.  Only image format of JPG and TIF are
+  supported.  Use `loop-vs-attach-image' to attach images
+  automatically in a certain directory.
 
   1. Creation of image-info file in world coordinate
 
-     From image-info file in device coordinate and Affine matrix in
-     VS, image-info file in world coordinate should be created.  The
-     affine matrix in VS can be monitored by `vs-get-affine'.
+     From image-info file in device coordinate (imajeoletry) and
+     Affine matrix in VS session, image-info file in world coordinate
+     (imageometry) should be created.  The affine matrix in VS session
+     can be monitored by `vs-get-affine'.
 
   2. Crop and spin the image
 
      On import, VisualStage 2007 1.1 accepts coordinate, width, and
      height but rotation as image properties.  Unless image is rotated
-     in advance, all spin info is discarded on import.  Thus an image
+     in advance, spin info is discarded on import.  Thus an image
      will be cropped, spinned, and stored in deleteme.d/@crop and
      deleteme.d/@crop@spin, respectively.  You have additional four
-     files.
+     files (two images and two imageometry files).
 
   3. Attach three images to VS
 
      The three images are attached to VS according to image-info file
-     in world coordinate.  The operation can be done by `vs-add-file'.
+     in world coordinate (imageometry files).  The operation is
+     carried out by `vs-add-file'.
 
 EXAMPLE
   $ ls
@@ -77,7 +80,7 @@ SEE ALSO
   vs-get-affine
 
 IMPLEMENTATION
-  Copyright (c) 2015 ISEI, Okayama University
+  Copyright (c) 2015-2019 ISEI, Okayama University
   Licensed under the same terms as Ruby
 
 HISTORY
