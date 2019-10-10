@@ -173,9 +173,9 @@ module Vstool
 #				VisualStage::Address.refresh
 				basename = File.basename(original_image,".*")
 				addr_name = shorten_name(basename)
-				Vsattach.process_file(original_image, :addr_name => addr_name, :attach_name => shorten_name(basename))
-				Vsattach.process_file(cropped_image, :addr_name => addr_name, :attach_name => shorten_name(basename + '@crop'))
-				Vsattach.process_file(vs_image, :addr_name => addr_name, :attach_name => shorten_name(basename + '@crop@spin'), :background => true)
+				#Vsattach.process_file(original_image, :addr_name => addr_name, :attach_name => shorten_name(basename))
+				#Vsattach.process_file(cropped_image, :addr_name => addr_name, :attach_name => shorten_name(basename + '@crop'))
+				#Vsattach.process_file(vs_image, :addr_name => addr_name, :attach_name => shorten_name(basename + '@crop@spin'), :background => true)
 			end
 			return imagefile
 		rescue => ex
