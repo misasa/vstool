@@ -33,7 +33,7 @@ DESCRIPTION
   Copy image to VisualStage 2007.  You need to have a pair of image
   file and image-info file.  The image-info file is created by JEOL
   JSM-7001F or JSM-8530F and is also referred as imajeoletry file.
-  Three processes are involved.  Only image format of JPG and TIF are
+  Three processes are involved.  Image format of JPG, BMP, and TIF are
   supported.  Use `loop-vs-attach-image' to attach images
   automatically in a certain directory.
 
@@ -88,8 +88,8 @@ HISTORY
   May 21, 2015: Add documentation by TK
 
 OPTIONS
-  -n, --dry-run: Perform Affine transformation but do no copy the new images to Visual State 2007
-EOS
+  -n, --dry-run: Only create an imageometry for an image and no
+                 interaction with Visual Stage 2007 would be made.
 end
 options.parse!
 
