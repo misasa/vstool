@@ -20,8 +20,14 @@ begin
   end
 end
 
+params = {}
 options = OptionParser.new do |opts|
-	script_name = File.basename($0)
+  script_name = File.basename($0)
+  opts.on("-n", "--dry-run", "Only create an imageometry for an image and no
+  interaction with Visual Stage 2007 would be made.") do |v|
+    params[:dry_run] = v
+  end
+
     opts.banner = <<"EOS"
 NAME
   #{File.basename($0, '.*')} - Copy image to VisualStage 2007
@@ -88,14 +94,13 @@ HISTORY
   May 21, 2015: Add documentation by TK
 
 OPTIONS
-  -n, --dry-run: Only create an imageometry for an image and no
-                 interaction with Visual Stage 2007 would be made.
+
+EOS
 end
 options.parse!
 
-params = {:sample_name => "image2sem", :base_path => base_path}
+params = params.merge({:sample_name => "image2sem", :base_path => base_path})
 params[:stage_origin] = myconfigs['stage_origin'] || "ru"
 params[:world_origin] = myconfigs['world_origin'] || "ld"
-
 app = Vstool::Image2vs.new(params,ARGV)
 app.start

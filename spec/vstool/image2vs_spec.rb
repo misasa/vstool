@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Vstool
-	describe Image2vs, :current => true do
+	describe Image2vs do
 		describe ".shorten_name" do
 			before(:each) do
 			end
@@ -63,6 +63,56 @@ module Vstool
 		# 	end
 		# end
 
+		describe "#start with dry_run option", :current => true do
+		  let(:output) { double('output').as_null_object }
+		  let(:opencvtool) { OpenCvTool::OpenCvTool.new }
+		  let(:params) { {:dry_run => true, :output => output, :opencvtool => opencvtool }}
+		  let(:argv) { ['tmp/chitech@002.tif'] }
+		  let(:app) { Image2vs.new(params, argv) }
+          let(:affine){ [[1,0,0],[0,1,0],[0,0,1]] }
+		  before(:each) do
+
+			argv.each do |dest|
+				setup_file(dest)
+				setup_file(filename_for(dest, :ext => :txt))
+				#setup_file(filename_for(dest, :ext => :vs))
+				#setup_file(filename_for(dest, :ext => :vs, :insert_path => '/deleteme.d/crop/'))
+				#setup_file(filename_for(dest, :insert_path => '/deleteme.d/crop/'))					
+				#setup_file(filename_for(dest, :ext => :vs, :insert_path => '/deleteme.d/@VS/'))
+				#setup_file(filename_for(dest, :insert_path => '/deleteme.d/@VS/'))
+			end
+#				app.stub(:load_image_info).and_return(double('image_info'))
+			#ImageInfo.stub(:from_file).and_return(double('image_info').as_null_object)
+			ImageInfo.stub(:from_sem_info).and_return(double('image_info').as_null_object)
+			Vstool::Base.stub(:get_stage2world).and_return(affine)
+			VisualStage::Base.stub(:current?).and_return(true)
+			VisualStage::Base.stub(:init)
+			VisualStage::Address.stub(:find_or_create_by_name).and_return(double('addr').as_null_object)
+		  end
+
+		  it "process files" do
+			argv.each do |filepath|
+				app.should_receive(:process_file).with(filepath).and_return(true)
+			end	
+			app.start
+		  end
+
+		  it "load info-files" do
+			argv.each do |filepath|
+				info_file = filename_for(filepath, :ext => :txt)
+				ImageInfo.should_receive(:from_sem_info).with(info_file, affine, {:image_path => filepath}).and_return(double('image_info').as_null_object)
+			end	
+			app.start
+		  end
+
+		  it "sends a prcessing message" do
+
+			argv.each do |filepath|
+				output.should_receive(:puts).with('processing |' + filepath + '|...')
+			end
+			app.start
+		  end
+		end
 
 		describe "#start with exising vs" do
 

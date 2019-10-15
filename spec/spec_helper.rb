@@ -4,18 +4,26 @@ require 'yaml'
 #$LOAD_PATH.unshift File.expand_path('../../lib/opencvtool/lib', __FILE__)
 #require 'opencvtool'
 
-Dir.glob("spec/steps/**/*steps.rb") { |f| load f, true }
+#Dir.glob("spec/steps/**/*steps.rb") { |f| load f, true }
 def deleteall(delthem)
 	if FileTest.directory?(delthem) then
 		Dir.foreach( delthem ) do |file|
 			next if /^\.+$/ =~ file
 			deleteall(delthem.sub(/\/+$/,"") + "/" + file)
 		end
-		#p "#{delthem} deleting..."		
-		Dir.rmdir(delthem) rescue ""
+		p "#{delthem} deleting..."
+		begin		
+			Dir.rmdir(delthem)
+		rescue
+			p $!
+		end
 	else
-		#p "#{delthem} deleting..."
-		File.delete(delthem)
+		p "#{delthem} deleting..."
+		begin
+		  File.delete(delthem)
+		rescue
+		  p $!
+		end
 	end
 end
 

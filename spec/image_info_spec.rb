@@ -4,11 +4,10 @@ describe ImageInfo do
 	before(:each) do
 		dir = "tmp"	
 		deleteall(dir) if File.directory?(dir)
-		Dir.mkdir(dir)
+		Dir.mkdir(dir) unless File.directory?(dir)
 	end
 
-
-	describe ".load image with sem-info" do
+	describe ".load image with sem-info", :current => true do
 		let(:image_path) { 'tmp/chitech@002.tif' }		
 		let(:txt_path) { 'tmp/chitech@002.txt' }
 	 	let(:opencvtool) { OpenCvTool::OpenCvTool.new }		
@@ -19,6 +18,12 @@ describe ImageInfo do
 			setup_file(image_path)
 			setup_file(txt_path)
 		end
+		after(:each) do
+			dir = "tmp"	
+			deleteall(dir) if File.directory?(dir)
+			Dir.mkdir(dir) unless File.directory?(dir)
+		end
+	
 		it "load sem-info with stage2world" do
 			ImageInfo.should_receive(:from_sem_info).with(txt_path,stage2vs).and_return(ImageInfo.new)
 			ImageInfo.load(image_path,:stage2world => stage2vs)
@@ -186,7 +191,7 @@ describe ImageInfo do
 		end
 	end
 
-	describe "#.corners_on_xy", :current => true do
+	describe "#.corners_on_xy" do
 		let(:image_path) { 'tmp/chitech@002.tif'}
 		let(:txt_path) { 'tmp/chitech@002.txt'}
 		#let(:vs_path) { 'tmp/chitech@002.vs'}

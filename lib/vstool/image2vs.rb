@@ -35,6 +35,7 @@ module Vstool
 			@verbose = params[:verbose] || false
 			@clear = params[:clear] || false
 			@offline = params[:offline] || true
+			@dry_run = params[:dry_run] || false
 			@stage_origin = params[:stage_origin] || "ru"
 			@world_origin = params[:world_origin] || "ld"
 
@@ -124,7 +125,8 @@ module Vstool
 			 	raise "ERROR: VisualStage File is not opened" unless VisualStage::Base.current?
 				ImageInfo.from_sem_info(image_txt_path, get_stage2world, :image_path => imagefile)
 			end
-
+			return imagefile if @dry_run
+			
 			unless File.exists?(cropped_image) && File.exists?(cropped_image_info_file)
 			# 	@output.puts "#{cropped_image} exists..."
 			# 	@output.puts "#{cropped_image_info_file} exists..."
@@ -173,9 +175,9 @@ module Vstool
 #				VisualStage::Address.refresh
 				basename = File.basename(original_image,".*")
 				addr_name = shorten_name(basename)
-				#Vsattach.process_file(original_image, :addr_name => addr_name, :attach_name => shorten_name(basename))
-				#Vsattach.process_file(cropped_image, :addr_name => addr_name, :attach_name => shorten_name(basename + '@crop'))
-				#Vsattach.process_file(vs_image, :addr_name => addr_name, :attach_name => shorten_name(basename + '@crop@spin'), :background => true)
+				Vsattach.process_file(original_image, :addr_name => addr_name, :attach_name => shorten_name(basename))
+				Vsattach.process_file(cropped_image, :addr_name => addr_name, :attach_name => shorten_name(basename + '@crop'))
+				Vsattach.process_file(vs_image, :addr_name => addr_name, :attach_name => shorten_name(basename + '@crop@spin'), :background => true)
 			end
 			return imagefile
 		rescue => ex
