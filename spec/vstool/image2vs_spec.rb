@@ -34,7 +34,7 @@ module Vstool
 
 			dir = "tmp"	
 			deleteall(dir) if File.directory?(dir)
-			Dir.mkdir(dir)
+			Dir.mkdir(dir) unless File.directory?(dir)
 		end
 
 
@@ -63,7 +63,49 @@ module Vstool
 		# 	end
 		# end
 
-		describe "#start with dry_run option", :current => true do
+		describe "#run with sem-supporter", :current => true do
+			let(:output) { double('output').as_null_object }
+			let(:opencvtool) { OpenCvTool::OpenCvTool.new }
+			let(:params) { {:output => output, :opencvtool => opencvtool }}
+			let(:argv) { ['tmp/sem-supporter.jpg'] }
+			let(:app) { Image2vs.new(params, argv) }
+			let(:affine){ [[1,0,0],[0,1,0],[0,0,1]] }
+			before(:each) do
+		  		argv.each do |dest|
+			  		setup_file(dest)
+			  		setup_file(filename_for(dest, :ext => :txt))
+				end
+				ImageInfo.stub(:from_sem_info).and_return(double('image_info').as_null_object)
+		 		Vstool::Base.stub(:get_stage2world).and_return(affine)
+		  		VisualStage::Base.stub(:current?).and_return(true)
+		  		VisualStage::Base.stub(:init)
+		  		VisualStage::Address.stub(:find_or_create_by_name).and_return(double('addr').as_null_object)
+			end
+
+			it "process files" do
+		  		#argv.each do |filepath|
+			  	#	app.should_receive(:process_file).with(filepath).and_return(true)
+		  		#end	
+		  		app.start
+			end
+
+			#it "load info-files" do
+#		  		argv.each do |filepath|
+#			  		info_file = filename_for(filepath, :ext => :txt)
+			  		#ImageInfo.should_receive(:from_sem_info).with(info_file, affine, {:image_path => filepath}).and_return(double('image_info').as_null_object)
+#		  		end	
+#		  		app.start
+#			end
+
+			#it "sends a prcessing message" do
+#
+#		  		argv.each do |filepath|
+#			  		output.should_receive(:puts).with('processing |' + filepath + '|...')
+#		  		end
+#		  		app.start
+#			end
+	  	end
+		describe "#start with dry_run option" do
 		  let(:output) { double('output').as_null_object }
 		  let(:opencvtool) { OpenCvTool::OpenCvTool.new }
 		  let(:params) { {:dry_run => true, :output => output, :opencvtool => opencvtool }}

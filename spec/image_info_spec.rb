@@ -7,7 +7,7 @@ describe ImageInfo do
 		Dir.mkdir(dir) unless File.directory?(dir)
 	end
 
-	describe ".load image with sem-info", :current => true do
+	describe ".load image with sem-info" do
 		let(:image_path) { 'tmp/chitech@002.tif' }		
 		let(:txt_path) { 'tmp/chitech@002.txt' }
 	 	let(:opencvtool) { OpenCvTool::OpenCvTool.new }		
@@ -133,21 +133,40 @@ describe ImageInfo do
 	end
 
 	describe ".from_sem_info" do
-		let(:txt_path) { 'tmp/chitech@002.txt' }
 	 	let(:opencvtool) { OpenCvTool::OpenCvTool.new }		
 	 	let(:stage2vs) { [[1,0,0],[0,1,0],[0,0,1]] }		
 		let(:from_txt) { ImageInfo.from_txt(txt_path) }	
-		let(:from_sem_info) { ImageInfo.from_sem_info(txt_path,stage2vs)}
+		let(:from_sem_info) { ImageInfo.from_sem_info(txt_path,stage2vs,opts)}
+		let(:opts){ {} }
 		before(:each) do
 			setup_file(txt_path)
 		end
-		it "returns instance of ImageInfo" do
-			from_sem_info.should be_an_instance_of(ImageInfo)
-		end
+		context "with chitech" do
+		  let(:txt_path) { 'tmp/chitech@002.txt' }
 
-		it "returns same instance as ImageInfo.from_txt" do
-			from_sem_info.locate.should eql(from_txt.locate)
+		  it "returns instance of ImageInfo" do
+		    from_sem_info.should be_an_instance_of(ImageInfo)
+		  end
+
+		  it "returns same instance as ImageInfo.from_txt" do
+		    from_sem_info.locate.should eql(from_txt.locate)
+		  end
 		end
+		context "with SEM supporter", :current => true do
+		  let(:txt_path) { 'tmp/sem-supporter.txt' }
+		  let(:image_path) { 'tmp/sem-supporter.jpg' }
+		  let(:opts){ {:image_path => image_path} }
+		  before do
+			setup_file(image_path)
+		  end
+		  it "returns instance of ImageInfo" do
+		    from_sem_info.should be_an_instance_of(ImageInfo)
+		  end
+  
+#		  it "returns same instance as ImageInfo.from_txt" do
+#		    from_sem_info.locate.should eql(from_txt.locate)
+#		  end
+		end  
 	end
 
 	describe ".from_sem_info with affine" do

@@ -278,6 +278,14 @@ class ImageInfo
         stage_position = vals[1..-1].map{|v| v.to_f }
         h[:stage_x_in_um] = stage_position[0] * 1000
         h[:stage_y_in_um] = stage_position[1] * 1000          
+      else
+        if m = /SIF_CM_STAGE_X (\d+\.\d+)/.match(line)
+          h[:stage_x_in_um] = m[1].to_f * 1000
+        end
+
+        if m = /SIF_CM_STAGE_Y (\d+\.\d+)/.match(line)
+          h[:stage_y_in_um] = m[1].to_f * 1000
+        end
       end
       
       if m = /SM_SCAN_ROTATION (\d+)/.match(line)
@@ -294,8 +302,9 @@ class ImageInfo
   def self.from_sem_info(path, stage2world, opts = {})
     raise 'specify stage2world' unless stage2world
     h = Hash.new
+    h[:width_in_pix], h[:height_in_pix] = Dimensions.dimensions(opts[:image_path]) if opts[:image_path]
     lines = textfile2array(path)
-    h = parse_sem_info(lines.join("\n"))
+    h = h.merge(parse_sem_info(lines.join("\n")))
     width_in_um = 12.0 * 10 * 1000 / h[:magnification]
     height_in_um = h[:height_in_pix] * width_in_um / h[:width_in_pix]
     pixels_per_um = h[:width_in_pix] / width_in_um
@@ -353,13 +362,21 @@ class ImageInfo
           h[:height_in_pix] = m[2].to_i
         end
         
-        if /CM_STAGE_POS/ =~line
+        if /CM_STAGE_POS/ =~ line
           vals = line.split
           stage_position = vals[1..-1].map{|v| v.to_f }
           h[:stage_x_in_um] = stage_position[0] * 1000
-          h[:stage_y_in_um] = stage_position[1] * 1000          
+          h[:stage_y_in_um] = stage_position[1] * 1000
+        else
+          if m = /SIF_CM_STAGE_X (\d+\.\d+)/.match(line)
+            h[:stage_x_in_um] = m[1].to_f * 1000
+          end
+
+          if m = /SIF_CM_STAGE_Y (\d+\.\d+)/.match(line)
+            h[:stage_y_in_um] = m[1].to_f * 1000
+          end
         end
-        
+
         if m = /SM_SCAN_ROTATION (\d+)/.match(line)
           h[:scan_rotation] = m[1].to_f          
         end
