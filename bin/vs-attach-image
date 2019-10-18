@@ -90,7 +90,7 @@ IMPLEMENTATION
   Licensed under the same terms as Ruby
 
 HISTORY
-  October 18, 2019: Implement option --dry-run.
+  October 18, 2019: Implement option `--dry-run'.
   May 21, 2015: Add documentation.
 
 OPTIONS
