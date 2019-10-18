@@ -23,8 +23,7 @@ end
 params = {}
 options = OptionParser.new do |opts|
   script_name = File.basename($0)
-  opts.on("-n", "--dry-run", "Only create an imageometry for an image and no
-  interaction with Visual Stage 2007 would be made.") do |v|
+  opts.on("-n", "--dry-run", "Only create an imageometry for an image and no interaction with Visual Stage 2007 would be made.") do |v|
     params[:dry_run] = v
   end
 
@@ -33,15 +32,16 @@ NAME
   #{File.basename($0, '.*')} - Copy image to VisualStage 2007
 
 SYNOPSIS
-  #{script_name} [options] imagefile
+  #{script_name} [options] imagefile [imagefile2,...]
 
 DESCRIPTION
   Copy image to VisualStage 2007.  You need to have a pair of image
   file and image-info file.  The image-info file is created by JEOL
   JSM-7001F or JSM-8530F and is also referred as imajeoletry file.
   Three processes are involved.  Image format of JPG, BMP, and TIF are
-  supported.  Use `loop-vs-attach-image' to attach images
-  automatically in a certain directory.
+  supported.  Accept multiple IMAGEFILE.  Use `loop-vs-attach-image'
+  to attach images automatically in a certain directory.  It is also
+  useful to write Makefile.
 
   1. Creation of image-info file in world coordinate
 
@@ -90,11 +90,10 @@ IMPLEMENTATION
   Licensed under the same terms as Ruby
 
 HISTORY
-  May 20, 2015: Add documentation by MY
-  May 21, 2015: Add documentation by TK
+  October 18, 2019: Implement option `--dry-run'.
+  May 21, 2015: Add documentation.
 
 OPTIONS
-
 EOS
 end
 options.parse!
