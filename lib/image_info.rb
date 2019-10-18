@@ -279,12 +279,14 @@ class ImageInfo
         h[:stage_x_in_um] = stage_position[0] * 1000
         h[:stage_y_in_um] = stage_position[1] * 1000          
       else
-        if m = /SIF_CM_STAGE_X (\d+\.\d+)/.match(line)
-          h[:stage_x_in_um] = m[1].to_f * 1000
+        if /SIF_CM_STAGE_X/ =~ line
+          vals = line.split
+          h[:stage_x_in_um] = vals[1].to_f * 1000
         end
 
-        if m = /SIF_CM_STAGE_Y (\d+\.\d+)/.match(line)
-          h[:stage_y_in_um] = m[1].to_f * 1000
+        if /SIF_CM_STAGE_Y/ =~ line
+          vals = line.split
+          h[:stage_y_in_um] = vals[1].to_f * 1000
         end
       end
       
@@ -368,13 +370,16 @@ class ImageInfo
           h[:stage_x_in_um] = stage_position[0] * 1000
           h[:stage_y_in_um] = stage_position[1] * 1000
         else
-          if m = /SIF_CM_STAGE_X (\d+\.\d+)/.match(line)
-            h[:stage_x_in_um] = m[1].to_f * 1000
+          if /SIF_CM_STAGE_X/ =~ line
+            vals = line.split
+            h[:stage_x_in_um] = vals[1].to_f * 1000
           end
-
-          if m = /SIF_CM_STAGE_Y (\d+\.\d+)/.match(line)
-            h[:stage_y_in_um] = m[1].to_f * 1000
+  
+          if /SIF_CM_STAGE_Y/ =~ line
+            vals = line.split
+            h[:stage_y_in_um] = vals[1].to_f * 1000
           end
+  
         end
 
         if m = /SM_SCAN_ROTATION (\d+)/.match(line)

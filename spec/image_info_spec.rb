@@ -162,11 +162,18 @@ describe ImageInfo do
 		  it "returns instance of ImageInfo" do
 		    from_sem_info.should be_an_instance_of(ImageInfo)
 		  end
-  
-#		  it "returns same instance as ImageInfo.from_txt" do
-#		    from_sem_info.locate.should eql(from_txt.locate)
-#		  end
-		end  
+  		end  
+		context "with chd-K4-c", :current => true do
+			let(:txt_path) { 'tmp/chd-K4-c.txt' }
+			let(:image_path) { 'tmp/chd-K4-c.png' }
+			let(:opts){ {:image_path => image_path} }
+			before do
+			  setup_file(image_path)
+			end
+			it "returns instance of ImageInfo" do
+			  from_sem_info.should be_an_instance_of(ImageInfo)
+			end
+		end    
 	end
 
 	describe ".from_sem_info with affine" do
