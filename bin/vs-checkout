@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+require 'vstool'
+
+app = Vstool::MedusaSync.new
+app.run_checkout
