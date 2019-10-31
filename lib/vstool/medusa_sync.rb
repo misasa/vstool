@@ -1,11 +1,17 @@
 module Vstool
-    class Import < Base
+    class MedusaSync < Base
         def initialize(params = {})
 			@params = params
 			@output = params[:output] || STDOUT
 			@stderr = params[:stderr] || STDERR
 			@verbose = params[:verbose] || false
+        end
 
+        def verbose
+            @params[:verbose]
+        end
+
+        def run_import(argv = ARGV)
 			@option_parser = OptionParser.new do |opts|
 				opts.banner = "usage: vs-import [options] VS-DIR SURFACE-NAME"
 				opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
@@ -15,14 +21,7 @@ module Vstool
 					@stderr.puts opts.to_s
 					exit
 				end
-			end            
-        end
-
-        def verbose
-            @params[:verbose]
-        end
-
-        def run(argv = ARGV)
+			end                        
             argv = @option_parser.parse(argv)
             @output.puts "argv: #{argv}" if verbose
             @output.puts "options: #{@params}" if verbose

@@ -7,7 +7,7 @@ require 'visual_stage'
 require 'vstool/base'
 require 'vstool/image2vs'
 require 'vstool/vsattach'
-require 'vstool/import'
+require 'vstool/medusa_sync'
 
 
 module Vstool
