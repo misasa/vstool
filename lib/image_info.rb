@@ -93,8 +93,12 @@ class ImageInfo
   
   def self.load(path, opts = {})
     pixs = Dimensions.dimensions(path)
-    if File.exist?(filepath_for(path, :ext => :vs))
-       this = from_file(filepath_for(path, :ext => :vs))
+
+    if File.exist?(filepath_for(path, :ext => :geo))
+      this = from_file(filepath_for(path, :ext => :geo))
+    elsif File.exist?(filepath_for(path, :ext => :vs))
+      vs2geo(path)
+      this = from_file(filepath_for(path, :ext => :geo))
     elsif File.exist?(filepath_for(path, :ext => :txt))
        this = from_sem_info(filepath_for(path, :ext => :txt), opts[:stage2world])
     else
@@ -135,7 +139,7 @@ class ImageInfo
       tcorners_on_world = opencvtool.transform_points([[crop_start_x, crop_start_y],[crop_end_x, crop_start_y],[crop_end_x, crop_end_y],[crop_start_x, crop_end_y]], :matrix => affine(:pixs2world))      
       affine_image2world = opencvtool.H_from_points(cropped_image_info.corners_on_image, tcorners_on_world)
       cropped_image_info.set_affine(affine_image2world, :image2world)
-      cropped_image_info.info_path = self.class.filepath_for(cropped_image, :ext => :vs)
+      cropped_image_info.info_path = self.class.filepath_for(cropped_image, :ext => :geo)
       cropped_image_info.dump_info
 
       return cropped_image_info
@@ -166,7 +170,7 @@ class ImageInfo
       corners_on_vs_image = opencvtool.transform_points(corners_on_world, :matrix => warp_image_info.affine(:world2pixs))
       opencvtool.warp_image(image_path, :corners => corners_on_vs_image, :geometry => warp_image_info.pixs, :output_file => warp_image)
       warp_image_info.image_path = warp_image
-      warp_image_info.info_path = self.class.filepath_for(warp_image, :ext => :vs)
+      warp_image_info.info_path = self.class.filepath_for(warp_image, :ext => :geo)
       warp_image_info.dump_info
       return warp_image_info
   end
@@ -297,6 +301,12 @@ class ImageInfo
     return h
   end
 
+  def self.vs2geo(path, opts = {})
+    vs_file = filepath_for(path, opts.merge(:ext => :vs))
+    geo_file = filepath_for(path, opts.merge(:ext => :geo))
+    FileUtils.copy(vs_file, geo_file)
+  end
+
   def self.distance(p1, p2)
     Math.sqrt((p2[0] - p1[0])**2 + (p2[1] - p1[1])**2)
   end
@@ -331,7 +341,7 @@ class ImageInfo
         this.image_dimensions = Dimensions.dimensions(opts[:image_path])
     end
     this.set_affine(affine_image2world, :image2world)
-    this.info_path = filepath_for(path, :ext => :vs)
+    this.info_path = filepath_for(path, :ext => :geo)
     this.dump_info
     this
   end

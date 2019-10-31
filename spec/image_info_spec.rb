@@ -1,12 +1,6 @@
 require 'spec_helper'
 
 describe ImageInfo do
-	before(:each) do
-		dir = "tmp"	
-		deleteall(dir) if File.directory?(dir)
-		Dir.mkdir(dir) unless File.directory?(dir)
-	end
-
 	describe ".load image with sem-info" do
 		let(:image_path) { 'tmp/chitech@002.tif' }		
 		let(:txt_path) { 'tmp/chitech@002.txt' }
@@ -42,16 +36,61 @@ describe ImageInfo do
 
 	end
 
-	describe ".load image with info" do
+	describe ".vs2geo" do
+		subject { ImageInfo.vs2geo(image_path) }
 		let(:image_path) { 'tmp/chitech@002.tif' }		
 		let(:vs_path) { 'tmp/chitech@002.vs' }
+		let(:geo_path) { 'tmp/chitech@002.geo' }
+		before(:each) do
+			setup_file(image_path)
+			setup_file(vs_path)
+		end
+		it "generates geo" do
+			subject
+			expect(File).to exist(geo_path)
+		end
+		after(:each) do
+			dir = "tmp"	
+			deleteall(dir) if File.directory?(dir)
+			Dir.mkdir(dir) unless File.directory?(dir)
+		end
+	end
+
+	describe ".load image with geo-file" do
+		let(:image_path) { 'tmp/chitech@002.tif' }		
+		let(:geo_path) { 'tmp/chitech@002.geo' }
+		before(:each) do
+			setup_file(image_path)
+			setup_file(geo_path)
+		end
+		after(:each) do
+			dir = "tmp"	
+			deleteall(dir) if File.directory?(dir)
+			Dir.mkdir(dir) unless File.directory?(dir)
+		end
+		it "load geo_file" do
+			ImageInfo.should_receive(:from_file).with(geo_path).and_return(ImageInfo.new)
+			ImageInfo.load(image_path)
+		end
+	end
+
+
+	describe ".load image with vs-file" do
+		let(:image_path) { 'tmp/chitech@002.tif' }		
+		let(:vs_path) { 'tmp/chitech@002.vs' }
+		let(:geo_path) { 'tmp/chitech@002.geo' }
 		#let(:loaded) { ImageInfo.load(image_path) }
 		before(:each) do
 			setup_file(image_path)
 			setup_file(vs_path)
 		end
-		it "load sem-info" do
-			ImageInfo.should_receive(:from_file).with(vs_path).and_return(ImageInfo.new)
+		after(:each) do
+			dir = "tmp"	
+			deleteall(dir) if File.directory?(dir)
+			Dir.mkdir(dir) unless File.directory?(dir)
+		end
+		it "load geo_file" do
+			ImageInfo.should_receive(:from_file).with(geo_path).and_return(ImageInfo.new)
 			ImageInfo.load(image_path)
 		end
 
@@ -62,11 +101,16 @@ describe ImageInfo do
 
 	describe "#crop image with info" do
 		let(:image_path) { 'tmp/chitech@002.tif' }		
-		let(:vs_path) { 'tmp/chitech@002.vs' }
+		let(:geo_path) { 'tmp/chitech@002.geo' }
 		let(:info) { ImageInfo.load(image_path) }
 		before(:each) do
 			setup_file(image_path)
-			setup_file(vs_path)
+			setup_file(geo_path)
+		end
+		after(:each) do
+			dir = "tmp"	
+			deleteall(dir) if File.directory?(dir)
+			Dir.mkdir(dir) unless File.directory?(dir)
 		end
 		it "creates crop-image" do
 			crop_info = info.crop
@@ -82,8 +126,8 @@ describe ImageInfo do
 		it "creates crop-image-info-file" do
 			crop_info = info.crop
 			crop_image_path = crop_info.image_path
-			crop_vs_path = filename_for(crop_image_path, :ext => :vs)
-			expect(File).to exist(crop_vs_path)
+			crop_geo_path = filename_for(crop_image_path, :ext => :geo)
+			expect(File).to exist(crop_geo_path)
 		end
 
 		it "returns cropped-info" do
@@ -94,16 +138,28 @@ describe ImageInfo do
 
 	describe "#warp image with info" do
 		let(:image_path) { 'tmp/chitech@002.tif' }		
-		let(:vs_path) { 'tmp/chitech@002.vs' }
+		let(:geo_path) { 'tmp/chitech@002.geo' }
 		let(:info) { ImageInfo.load(image_path) }
 		let(:crop_info) { info.crop }
 		before(:each) do
 			setup_file(image_path)
-			setup_file(vs_path)
+			setup_file(geo_path)
 		end
+		after(:each) do
+			dir = "tmp"	
+			deleteall(dir) if File.directory?(dir)
+			Dir.mkdir(dir) unless File.directory?(dir)
+		end
+
 		it "creates warp-info" do
 			warp_info = crop_info.warp
 			warp_info.should be_an_instance_of(ImageInfo)
+		end
+
+		it "creates warp-image-info-file" do
+			warp_info = crop_info.warp
+			warp_geo_path = filename_for(warp_info.image_path, :ext => :geo)
+			expect(File).to exist(warp_geo_path)
 		end
 
 		it "creates warp-image" do
@@ -141,6 +197,11 @@ describe ImageInfo do
 		before(:each) do
 			setup_file(txt_path)
 		end
+		after(:each) do
+			dir = "tmp"	
+			deleteall(dir) if File.directory?(dir)
+			Dir.mkdir(dir) unless File.directory?(dir)
+		end
 		context "with chitech" do
 		  let(:txt_path) { 'tmp/chitech@002.txt' }
 
@@ -148,17 +209,25 @@ describe ImageInfo do
 		    from_sem_info.should be_an_instance_of(ImageInfo)
 		  end
 
+		  it "generates geo-file" do
+			info = from_sem_info
+			geo_path = filename_for(txt_path, :ext => :geo)
+			expect(File).to exist(geo_path)
+		  end
+
 		  it "returns same instance as ImageInfo.from_txt" do
 		    from_sem_info.locate.should eql(from_txt.locate)
 		  end
 		end
-		context "with SEM supporter", :current => true do
+
+		context "with SEM supporter" do
 		  let(:txt_path) { 'tmp/sem-supporter.txt' }
 		  let(:image_path) { 'tmp/sem-supporter.jpg' }
 		  let(:opts){ {:image_path => image_path} }
 		  before do
 			setup_file(image_path)
 		  end
+
 		  it "returns instance of ImageInfo" do
 		    from_sem_info.should be_an_instance_of(ImageInfo)
 		  end
@@ -170,6 +239,7 @@ describe ImageInfo do
 			before do
 			  setup_file(image_path)
 			end
+
 			it "returns instance of ImageInfo" do
 			  from_sem_info.should be_an_instance_of(ImageInfo)
 			end
@@ -178,7 +248,7 @@ describe ImageInfo do
 
 	describe ".from_sem_info with affine" do
 		let(:txt_path) { 'tmp/chitech@002.txt' }
-		let(:vs_path) { 'tmp/chitech@002.vs'}		
+		let(:geo_path) { 'tmp/chitech@002.geo'}		
 	 	let(:opencvtool) { OpenCvTool::OpenCvTool.new }		
 	 	let(:stage2vs) { opencvtool.Haffine_from_params(:angle => 10) }
 		let(:from_txt) { ImageInfo.from_txt(txt_path) }	
@@ -186,6 +256,11 @@ describe ImageInfo do
 		before(:each) do
 			setup_file(txt_path)
 			@from_sem_info = ImageInfo.from_sem_info(txt_path, stage2vs)		
+		end
+		after(:each) do
+			dir = "tmp"	
+			deleteall(dir) if File.directory?(dir)
+			Dir.mkdir(dir) unless File.directory?(dir)
 		end
 		it "returns instance of ImageInfo" do
 			@from_sem_info.should be_an_instance_of(ImageInfo)
@@ -195,9 +270,9 @@ describe ImageInfo do
 			@from_sem_info.locate.should_not eql(from_txt.locate)
 		end
 
-		it "dumps vs-file" do
-			from_vs = ImageInfo.from_file(vs_path)
-			@from_sem_info.locate.should eql(from_vs.locate)			
+		it "dumps geo-file" do
+			from_geo = ImageInfo.from_file(geo_path)
+			@from_sem_info.locate.should eql(from_geo.locate)			
 		end
 	end
 

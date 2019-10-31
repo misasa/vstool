@@ -73,7 +73,7 @@ EXAMPLE
   $ ls -lR
   tt_grt_bcg12@39.jpg
   tt_grt_bcg12@39.txt
-  tt_grt_bcg12@39.vs
+  tt_grt_bcg12@39.geo
   deleteme.d/@crop/tt_grt_bcg12@39.jpg
   deleteme.d/@crop/tt_grt_bcg12@39.txt
   deleteme.d/@crop@spin/tt_grt_bcg12@39.jpg
@@ -90,6 +90,7 @@ IMPLEMENTATION
   Licensed under the same terms as Ruby
 
 HISTORY
+  October 31, 2019: Support extention `.geo'.
   October 18, 2019: Implement option `--dry-run'.
   May 21, 2015: Add documentation.
 

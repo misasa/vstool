@@ -51,19 +51,7 @@ module Vstool
 			end
 		end
 
-		# describe "#new with '-v'" do
-		# 	let(:output) { double('output').as_null_object }
-		# 	let(:params) { {:verbose => false, :output => output}}
-		# 	let(:argv) { ["-v"] }
-		# 	let(:app) { Image2vs.new(params) }
-		# 	it "sets verbose true" do
-		# 		#STDERR.should_receive(:puts).with(/^usage:/)
-		# 		app.optionparse(argv)
-		# 		app.verbose.should be_true
-		# 	end
-		# end
-
-		describe "#run with sem-supporter", :current => true do
+		describe "#run with sem-supporter" do
 			let(:output) { double('output').as_null_object }
 			let(:opencvtool) { OpenCvTool::OpenCvTool.new }
 			let(:params) { {:output => output, :opencvtool => opencvtool }}
@@ -89,22 +77,8 @@ module Vstool
 		  		app.start
 			end
 
-			#it "load info-files" do
-#		  		argv.each do |filepath|
-#			  		info_file = filename_for(filepath, :ext => :txt)
-			  		#ImageInfo.should_receive(:from_sem_info).with(info_file, affine, {:image_path => filepath}).and_return(double('image_info').as_null_object)
-#		  		end	
-#		  		app.start
-#			end
-
-			#it "sends a prcessing message" do
-#
-#		  		argv.each do |filepath|
-#			  		output.should_receive(:puts).with('processing |' + filepath + '|...')
-#		  		end
-#		  		app.start
-#			end
 	  	end
+
 		describe "#start with dry_run option" do
 		  let(:output) { double('output').as_null_object }
 		  let(:opencvtool) { OpenCvTool::OpenCvTool.new }
@@ -123,8 +97,6 @@ module Vstool
 				#setup_file(filename_for(dest, :ext => :vs, :insert_path => '/deleteme.d/@VS/'))
 				#setup_file(filename_for(dest, :insert_path => '/deleteme.d/@VS/'))
 			end
-#				app.stub(:load_image_info).and_return(double('image_info'))
-			#ImageInfo.stub(:from_file).and_return(double('image_info').as_null_object)
 			ImageInfo.stub(:from_sem_info).and_return(double('image_info').as_null_object)
 			Vstool::Base.stub(:get_stage2world).and_return(affine)
 			VisualStage::Base.stub(:current?).and_return(true)
@@ -156,7 +128,7 @@ module Vstool
 		  end
 		end
 
-		describe "#start with exising vs" do
+		describe "#start with exising vs", :current => true do
 
 			let(:output) { double('output').as_null_object }
 			let(:opencvtool) { OpenCvTool::OpenCvTool.new }
@@ -170,16 +142,22 @@ module Vstool
 					setup_file(dest)
 					#setup_file(filename_for(dest, :ext => :txt))
 					setup_file(filename_for(dest, :ext => :vs))
-					setup_file(filename_for(dest, :ext => :vs, :insert_path => '/deleteme.d/crop/'))
-					setup_file(filename_for(dest, :insert_path => '/deleteme.d/crop/'))					
-					setup_file(filename_for(dest, :ext => :vs, :insert_path => '/deleteme.d/@VS/'))
-					setup_file(filename_for(dest, :insert_path => '/deleteme.d/@VS/'))
+					setup_file(filename_for(dest, :ext => :vs, :insert_path => '/deleteme.d/@crop/'))
+					setup_file(filename_for(dest, :insert_path => '/deleteme.d/@crop/'))					
+					setup_file(filename_for(dest, :ext => :vs, :insert_path => '/deleteme.d/@crop@spin/'))
+					setup_file(filename_for(dest, :insert_path => '/deleteme.d/@crop@spin/'))
 				end
 #				app.stub(:load_image_info).and_return(double('image_info'))
 				ImageInfo.stub(:from_file).and_return(double('image_info').as_null_object)
 				VisualStage::Base.stub(:current?).and_return(true)
 				VisualStage::Base.stub(:init)
 				VisualStage::Address.stub(:find_or_create_by_name).and_return(double('addr').as_null_object)
+			end
+			
+			after(:each) do
+				dir = "tmp"	
+				deleteall(dir) if File.directory?(dir)
+				Dir.mkdir(dir) unless File.directory?(dir)	
 			end
 
 			it "process files" do
@@ -189,10 +167,10 @@ module Vstool
 				app.start
 			end
 
-			it "load vs-files" do
+			it "load geo-files" do
 				argv.each do |filepath|
-					vs_file = filename_for(filepath, :ext => :vs)
-					ImageInfo.should_receive(:from_file).with(vs_file).and_return(double('image_info').as_null_object)
+					geo_file = filename_for(filepath, :ext => :geo)
+					ImageInfo.should_receive(:from_file).with(geo_file).and_return(double('image_info').as_null_object)
 				end	
 				app.start
 			end

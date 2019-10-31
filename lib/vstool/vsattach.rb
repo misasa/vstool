@@ -102,10 +102,13 @@ module Vstool
 
 		def self.process_file(filepath, opts = {})
 			#return unless VisualStage::Base.current?
-			unless File.exist?(filepath_for(filepath,:ext => :vs))
-				image_info = ImageInfo.load(filepath, :stage2world => self.get_stage2world)
-			else
+			if File.exist?(filepath_for(filepath,:ext => :geo))
 				image_info = ImageInfo.load(filepath)
+			elsif File.exist?(filepath_for(filepath,:ext => :vs))
+				ImageInfo.vs2geo(filepath)
+				image_info = ImageInfo.load(filepath)
+			else
+				image_info = ImageInfo.load(filepath, :stage2world => self.get_stage2world)
 			end
 			basename = File.basename(filepath, ".*")
 

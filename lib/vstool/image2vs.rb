@@ -97,16 +97,16 @@ module Vstool
 			basename = File.basename(imagefile_path,".*")
 			extname = File.extname(imagefile_path)
 			image_txt_path = filepath_for(imagefile_path, :ext => :txt)
-			image_info_file = filepath_for(imagefile_path, :ext => :vs)
+			image_info_file = filepath_for(imagefile_path, :ext => :geo)
 
 			tmp_dir = "deleteme.d"
 			cropped_dir = File.join(tmp_dir, "@crop")
 			cropped_image = filepath_for(imagefile, :insert_path => cropped_dir)
-			cropped_image_info_file = filepath_for(imagefile, :ext => :vs, :insert_path => cropped_dir)
+			cropped_image_info_file = filepath_for(imagefile, :ext => :geo, :insert_path => cropped_dir)
 
 			vs_dir = File.join(tmp_dir, "@crop@spin")
 			vs_image = filepath_for(imagefile, :insert_path => vs_dir)
-			vs_image_info_file = filepath_for(imagefile, :ext => :vs, :insert_path => vs_dir)
+			vs_image_info_file = filepath_for(imagefile, :ext => :geo, :insert_path => vs_dir)
 
 			raise "#{imagefile_path} does not exist" unless File.exists?(imagefile_path)
 
@@ -116,10 +116,18 @@ module Vstool
 			setup_dir(File.join(dirname,cropped_dir))
 			setup_dir(File.join(dirname,vs_dir))
 
-			# if File.exists?(image_info_file)
-			# 	@output.puts "#{image_info_file} exists..."
-			# 	image_info = load_image_info(image_info_file)
-			# else
+			unless File.exists?(image_info_file)
+				ImageInfo.vs2geo(imagefile_path) if File.exists?(filepath_for(imagefile_path, :ext => :vs))
+			end
+
+			unless File.exists?(cropped_image_info_file)
+				ImageInfo.vs2geo(cropped_image) if File.exists?(filepath_for(imagefile, :ext => :vs, :insert_path => cropped_dir))
+			end
+
+			unless File.exists?(vs_image_info_file)
+				ImageInfo.vs2geo(vs_image) if File.exists?(filepath_for(imagefile, :ext => :vs, :insert_path => vs_dir))
+			end
+
 			unless File.exists?(image_info_file)
 			 	raise "#{image_txt_path} does not exist" unless File.exists?(image_txt_path)
 			 	raise "ERROR: VisualStage File is not opened" unless VisualStage::Base.current?
