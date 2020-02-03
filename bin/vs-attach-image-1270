@@ -76,9 +76,10 @@ SEE ALSO
   vs-attach-image
   loop-vs-attach-image
   https://gitlab.misasa.okayama-u.ac.jp/gems/vstool
+  https://gitlab.misasa.okayama-u.ac.jp/gems/vstool/edit/master/bin/vs-attach-image-1270
 
 IMPLEMENTATION
-  Copyright (c) 2015-2018 ISEI, Okayama University
+  Copyright (c) 2015-2020 ISEI, Okayama University
   Licensed under the same terms as Ruby
 
 OPTIONS
