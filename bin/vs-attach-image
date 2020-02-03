@@ -82,10 +82,11 @@ EXAMPLE
   cmd> #{script_name} --dry-run *.bmp
 
 SEE ALSO
-  https://gitlab.misasa.okayama-u.ac.jp/gems/vstool
   loop-vs-attach-image
   vs-add-file
   vs-get-affine
+  https://dream.misasa.okayama-u.ac.jp
+  https://gitlab.misasa.okayama-u.ac.jp/gems/vstool/blob/master/bin/vs-attach-image
 
 IMPLEMENTATION
   Copyright (c) 2015-2020 ISEI, Okayama University
