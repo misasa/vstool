@@ -38,8 +38,8 @@ DESCRIPTION
   Copy image to VisualStage 2007.  You need to have a pair of image
   file and image-info file.  The image-info file is created by JEOL
   JSM-7001F or JSM-8530F and is also referred as imajeoletry file.
-  Three processes are involved.  Image format of JPG, BMP, and TIF are
-  supported.  Accept multiple IMAGEFILE.  Use `loop-vs-attach-image'
+  Three processes are involved.  Image format of PNG, JPG, BMP, and
+  TIF are supported.  Accept multiple IMAGEFILE.  Use `loop-vs-attach-image'
   to attach images automatically in a certain directory.  It is also
   useful to write Makefile.
 
