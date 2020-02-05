@@ -37,6 +37,9 @@ def setup_file(destfile)
 	FileUtils.copy(src, dest)
 end
 
+def random_number(n)
+	''.tap { |s| n.times { s << rand(0..9).to_s } }
+end
 
 def setup_data(destdir)
 	src_dir = File.expand_path('../fixtures/VS2007data',__FILE__)

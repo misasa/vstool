@@ -31,8 +31,11 @@ module Vstool
 				}.should raise_error(RuntimeError)
 			end
 
-			context "without geo-file" do
+			context "without geo-file", :current => true do
 				before(:each) do
+					dir = "tmp"	
+					deleteall(dir) if File.directory?(dir)
+					Dir.mkdir(dir) unless File.directory?(dir)
 					setup_file(image_path)
 				end
 				after(:each) do

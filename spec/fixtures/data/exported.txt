@@ -1,0 +1,5 @@
+Class	Name	X-Locate	Y-Locate	Data
+0	spot of chd-K4-c	2695.266	1584.067	
+0	spot of chd-D3g	-5127.508	2822.816	
+0	spot of chd-J5l	1031.891	434.775	
+0	spot of chd-D6a	-4837.951	-84.871	
