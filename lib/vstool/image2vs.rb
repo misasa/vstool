@@ -29,13 +29,16 @@ module Vstool
 		end
 
 		def initialize(params = {}, argv = nil)
+			params = {:attach_crop => true, :logger => Logger.new(STDERR)}.merge(params)
 			@params = params
 			@output = params[:output] || STDOUT
 			@stderr = params[:stderr] || STDERR
 			@verbose = params[:verbose] || false
 			@clear = params[:clear] || false
 			@offline = params[:offline] || true
-			@dry_run = params[:dry_run] || false
+			@dry_run = params[:dry_run]
+			@attach_crop = params[:attach_crop]
+			@logger = params[:logger]
 			@stage_origin = params[:stage_origin] || "ru"
 			@world_origin = params[:world_origin] || "ld"
 
@@ -54,11 +57,10 @@ module Vstool
 			 #    	@clear = v
 			 #  	end
 			 	opts.on_tail("-h", "--help", "Show this message.") do |v|
-					@stderr.puts opts.to_s
+					STDERR.puts opts.to_s
 					exit
 				end
 			end
-
 			@inputfiles = []
 			if argv
 				@argv = argv
@@ -110,8 +112,7 @@ module Vstool
 
 			raise "#{imagefile_path} does not exist" unless File.exists?(imagefile_path)
 
-			@output.puts "processing |#{imagefile_path}|..."
-
+			@logger.info "processing |#{imagefile_path}|..."
 			setup_dir(File.join(dirname,tmp_dir))
 			setup_dir(File.join(dirname,cropped_dir))
 			setup_dir(File.join(dirname,vs_dir))
@@ -140,7 +141,7 @@ module Vstool
 			# 	@output.puts "#{cropped_image_info_file} exists..."
 			# 	cropped_image_info = ImageInfo.from_file(cropped_image_info_file)
 			# else
-				@output.puts "generating |#{cropped_image}|..."
+				@logger.info "generating |#{cropped_image}|..."
 				raise "#{image_info_file} does not exsit" unless File.exists?(image_info_file)
 				image_info = ImageInfo.load(imagefile)
 				cropped_image_info = image_info.crop(:path => cropped_image)
@@ -151,7 +152,7 @@ module Vstool
 			# 	@output.puts "#{vs_image_info_file} exists..."
 			# 	vs_image_info = ImageInfo.from_file(vs_image_info_file)
 			# else
-				@output.puts "generating |#{vs_image}|..."
+				@logger.info "generating |#{vs_image}|..."
 				raise "#{cropped_image_info_file} does not exist" unless File.exists?(cropped_image_info_file)
 				crop_info = ImageInfo.load(cropped_image)
 				vs_image_info = crop_info.warp(:path => vs_image)
@@ -164,7 +165,7 @@ module Vstool
 				  	myconfigs      = YAML.load(File.read(File.expand_path(config_path)))
 				  	vsdata_path = myconfigs['vsdata_path']
 				rescue
-				  @output.puts "generating |#{File.expand_path(config_path)}|..."
+				  @logger.info "generating |#{File.expand_path(config_path)}|..."
 				  myconfigs		= {}
 				end
 				unless VisualStage::Base.data_dir
@@ -184,7 +185,7 @@ module Vstool
 				basename = File.basename(original_image,".*")
 				addr_name = shorten_name(basename)
 				Vsattach.process_file(original_image, :addr_name => addr_name, :attach_name => shorten_name(basename))
-				Vsattach.process_file(cropped_image, :addr_name => addr_name, :attach_name => shorten_name(basename + '@crop'))
+				Vsattach.process_file(cropped_image, :addr_name => addr_name, :attach_name => shorten_name(basename + '@crop')) if @attach_crop
 				Vsattach.process_file(vs_image, :addr_name => addr_name, :attach_name => shorten_name(basename + '@crop@spin'), :background => true)
 			end
 			return imagefile

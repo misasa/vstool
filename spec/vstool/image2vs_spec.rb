@@ -38,13 +38,13 @@ module Vstool
 		end
 
 
-		describe "#new with '-h'" do
-			let(:output) { double('output').as_null_object }
-			let(:params) { {:output => output}}
+		describe "#new with '-h'", :current => true do
+			let(:logger) { double('logger').as_null_object }
+			let(:params) { {:logger => logger}}
 			let(:argv) { ["-h"] }
 			let(:app) { Image2vs.new(params) }
 			it "show usage and exit" do
-				STDERR.should_receive(:puts).with(/^usage:/)
+				#logger.should_receive(:puts).with(/^usage:/)
 				lambda {
 					app.optionparse(argv)
 				}.should raise_error(SystemExit)
@@ -52,9 +52,9 @@ module Vstool
 		end
 
 		describe "#run with sem-supporter" do
-			let(:output) { double('output').as_null_object }
+			let(:logger) { double('logger').as_null_object }
 			let(:opencvtool) { OpenCvTool::OpenCvTool.new }
-			let(:params) { {:output => output, :opencvtool => opencvtool }}
+			let(:params) { {:logger => logger, :opencvtool => opencvtool }}
 			let(:argv) { ['tmp/sem-supporter.jpg'] }
 			let(:app) { Image2vs.new(params, argv) }
 			let(:affine){ [[1,0,0],[0,1,0],[0,0,1]] }
@@ -80,9 +80,9 @@ module Vstool
 	  	end
 
 		describe "#start with dry_run option" do
-		  let(:output) { double('output').as_null_object }
+		  let(:logger) { double('logger').as_null_object }
 		  let(:opencvtool) { OpenCvTool::OpenCvTool.new }
-		  let(:params) { {:dry_run => true, :output => output, :opencvtool => opencvtool }}
+		  let(:params) { {:dry_run => true, :logger => logger, :opencvtool => opencvtool }}
 		  let(:argv) { ['tmp/chitech@002.tif'] }
 		  let(:app) { Image2vs.new(params, argv) }
           let(:affine){ [[1,0,0],[0,1,0],[0,0,1]] }
@@ -122,7 +122,7 @@ module Vstool
 		  it "sends a prcessing message" do
 
 			argv.each do |filepath|
-				output.should_receive(:puts).with('processing |' + filepath + '|...')
+				logger.should_receive(:info).with('processing |' + filepath + '|...')
 			end
 			app.start
 		  end
@@ -130,9 +130,9 @@ module Vstool
 
 		describe "#start with exising vs", :current => true do
 
-			let(:output) { double('output').as_null_object }
+			let(:logger) { double('logger').as_null_object }
 			let(:opencvtool) { OpenCvTool::OpenCvTool.new }
-			let(:params) { {:output => output, :opencvtool => opencvtool }}
+			let(:params) { {:logger => logger, :opencvtool => opencvtool }}
 			let(:argv) { ['tmp/chitech@002.tif'] }
 			let(:app) { Image2vs.new(params, argv) }
 
@@ -175,10 +175,35 @@ module Vstool
 				app.start
 			end
 
+			context "without --no-attach-crop option" do
+				let(:params) { {:logger => logger, :opencvtool => opencvtool}}
+				it "attach" do
+					argv.each do |filepath|
+						Vsattach.should_receive(:process_file).with(filepath, {:addr_name => File.basename(filepath,".*"), :attach_name => File.basename(filepath,".*")})
+						Vsattach.should_receive(:process_file).with(filename_for(filepath, :insert_path => '/deleteme.d/@crop/'), {:addr_name => File.basename(filepath, ".*"), :attach_name => File.basename(filepath,".*") + '@crop'})
+						Vsattach.should_receive(:process_file).with(filename_for(filepath, :insert_path => '/deleteme.d/@crop@spin/'), {:addr_name => File.basename(filepath, ".*"), :attach_name => 'hitech@002@crop@spin', :background => true})
+					end	
+					app.start
+				end
+			end
+
+			context "with --no-attach-crop option" do
+				let(:params) { {:logger => logger, :opencvtool => opencvtool, :attach_crop => false}}
+				it "attach" do
+					argv.each do |filepath|
+						Vsattach.should_receive(:process_file).with(filepath, {:addr_name => File.basename(filepath,".*"), :attach_name => File.basename(filepath,".*")})
+						#Vsattach.should_receive(:process_file).with(filename_for(filepath, :insert_path => '/deleteme.d/@crop/'), {:addr_name => File.basename(filepath, ".*"), :attach_name => File.basename(filepath,".*") + '@crop'})
+						Vsattach.should_receive(:process_file).with(filename_for(filepath, :insert_path => '/deleteme.d/@crop@spin/'), {:addr_name => File.basename(filepath, ".*"), :attach_name => 'hitech@002@crop@spin', :background => true})
+					end	
+					app.start
+				end
+			end
+
+
 			it "sends a prcessing message" do
 
 				argv.each do |filepath|
-					output.should_receive(:puts).with('processing |' + filepath + '|...')
+					logger.should_receive(:info).with('processing |' + filepath + '|...')
 				end
 				app.start
 			end
@@ -187,9 +212,9 @@ module Vstool
 
 		describe "#start without exising vs" do
 
-			let(:output) { double('output').as_null_object }
+			let(:logger) { double('logger').as_null_object }
 			let(:opencvtool) { OpenCvTool::OpenCvTool.new }
-			let(:params) { {:output => output, :opencvtool => opencvtool }}
+			let(:params) { {:logger => logger, :opencvtool => opencvtool }}
 			let(:argv) { ['tmp/chitech@002.tif'] }
 			let(:app) { Image2vs.new(params, argv) }
 			let(:stage2vs){[[1,0,0],[0,1,0],[0,0,1]]}
@@ -213,16 +238,16 @@ module Vstool
 			it "raise unless VisualStage::Base.current?" do
 				VisualStage::Base.should_receive(:current?).and_return(false)
 				argv.each do |filepath|
-					output.should_receive(:puts).with('processing |' + filepath + '|...')
+					logger.should_receive(:info).with('processing |' + filepath + '|...')
 #					output.should_receive(:puts).with("...")
-					STDERR.should_receive(:puts).with(/ERROR: VisualStage File is not opened/)
+					#logger.should_receive(:error).with(/ERROR: VisualStage File is not opened/)
 				end
 				app.start
 			end
 
 			it "sends a prcessing message" do
 				argv.each do |filepath|
-					output.should_receive(:puts).with('processing |' + filepath + '|...')
+					logger.should_receive(:info).with('processing |' + filepath + '|...')
 					# output.should_receive(:puts).with(filename_for(filepath,:insert_path => '/deleteme.d/crop/') + ' exists...')										
 					# output.should_receive(:puts).with(filename_for(filepath,:ext =>:vs,:insert_path => '/deleteme.d/crop/') + ' exists...')					
 					# output.should_receive(:puts).with(filename_for(filepath,:insert_path => '/deleteme.d/@VS/') + ' exists...')										

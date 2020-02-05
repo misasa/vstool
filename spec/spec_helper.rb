@@ -11,18 +11,16 @@ def deleteall(delthem)
 			next if /^\.+$/ =~ file
 			deleteall(delthem.sub(/\/+$/,"") + "/" + file)
 		end
-		p "#{delthem} deleting..."
 		begin		
 			Dir.rmdir(delthem)
 		rescue
-			p $!
+			$!
 		end
 	else
-		p "#{delthem} deleting..."
 		begin
 		  File.delete(delthem)
 		rescue
-		  p $!
+		  $!
 		end
 	end
 end
