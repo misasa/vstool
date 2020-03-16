@@ -50,9 +50,10 @@ SEE ALSO
   VisualStage 2007
   vs-get-affine (Python version)
   https://gitlab.misasa.okayama-u.ac.jp/gems/vstool
+  https://gitlab.misasa.okayama-u.ac.jp/gems/vstool/blob/master/bin/vs-get-affine
 
 IMPLEMENTATION
-  Copyright (C) 2012, 2018 Okayama University
+  Copyright (C) 2012-2020 Okayama University
   License GPLv3+: GNU GPL version 3 or later
 
 HISTORY AND TODO
