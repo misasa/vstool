@@ -38,7 +38,7 @@ module Vstool
 		end
 
 
-		describe "#new with '-h'", :current => true do
+		describe "#new with '-h'" do
 			let(:logger) { double('logger').as_null_object }
 			let(:params) { {:logger => logger}}
 			let(:argv) { ["-h"] }
@@ -128,7 +128,7 @@ module Vstool
 		  end
 		end
 
-		describe "#start with exising vs", :current => true do
+		describe "#start with exising vs" do
 
 			let(:logger) { double('logger').as_null_object }
 			let(:opencvtool) { OpenCvTool::OpenCvTool.new }

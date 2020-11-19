@@ -232,7 +232,7 @@ describe ImageInfo do
 		    from_sem_info.should be_an_instance_of(ImageInfo)
 		  end
   		end  
-		context "with chd-K4-c", :current => true do
+		context "with chd-K4-c" do
 			let(:txt_path) { 'tmp/chd-K4-c.txt' }
 			let(:image_path) { 'tmp/chd-K4-c.png' }
 			let(:opts){ {:image_path => image_path} }
@@ -244,6 +244,45 @@ describe ImageInfo do
 			  from_sem_info.should be_an_instance_of(ImageInfo)
 			end
 		end    
+		context "with X001_Y009", :current => true do
+			let(:txt_path) { 'tmp/X001_Y009.txt' }
+			let(:stage2vs) { [[1.0,0.0,0.0],[0.0,1.0,0.0],[0.0,0.0,1]] }
+			let(:image_path) { 'tmp/X001_Y009.png' }
+			let(:opts){ {:image_path => image_path} }
+			before do
+			  setup_file(image_path)
+			end
+
+			it "returns instance of ImageInfo" do
+			  from_sem_info.should be_an_instance_of(ImageInfo)
+			end
+		end    
+		context "with X001_Y010", :current => true do
+			let(:txt_path) { 'tmp/X001_Y010.txt' }
+			let(:stage2vs) { [[1.0,0.0,0.0],[0.0,1.0,0.0],[0.0,0.0,1]] }
+			let(:image_path) { 'tmp/X001_Y010.png' }
+			let(:opts){ {:image_path => image_path} }
+			before do
+			  setup_file(image_path)
+			end
+
+			it "returns instance of ImageInfo" do
+			  from_sem_info.should be_an_instance_of(ImageInfo)
+			end
+		end    
+
+	end
+
+	describe ".rotate_xy" do
+		let(:xy){ [1,0] }
+		let(:angle){ 45 }
+		before { ImageInfo.rotate_xy(xy, angle) }
+		it { expect(ImageInfo.rotate_xy(xy, angle)).to be_an_instance_of(Array)}
+		context "with center" do
+			let(:center){ [100,200] }
+			before { ImageInfo.rotate_xy(xy, angle, center) }
+			it { expect(ImageInfo.rotate_xy(xy, angle, center)).to be_an_instance_of(Array)}
+		end
 	end
 
 	describe ".from_sem_info with affine" do

@@ -28,7 +28,6 @@ class ImageInfo
     center = opts[:center]
     size = opts[:size]
     origin = opts[:origin] || "ru"
-
     ranges = []
     2.times do |i|
       range = []
@@ -42,16 +41,29 @@ class ImageInfo
 
     case origin
     when "ld"
-      [[x_min, y_max], [x_max, y_max], [x_max, y_min], [x_min, y_min]]
+      co = [[x_min, y_max], [x_max, y_max], [x_max, y_min], [x_min, y_min]]
     when "rd"
-      [[x_max, y_max], [x_min, y_max], [x_min, y_min], [x_max, y_min]]
+      co = [[x_max, y_max], [x_min, y_max], [x_min, y_min], [x_max, y_min]]
     when "ru"
-      [[x_max, y_min], [x_min, y_min], [x_min, y_max], [x_max, y_max]]           
+      co = [[x_max, y_min], [x_min, y_min], [x_min, y_max], [x_max, y_max]]           
     when "lu"
-      [[x_min,y_min], [x_max, y_min], [x_max, y_max], [x_min, y_max]]
+      co = [[x_min,y_min], [x_max, y_min], [x_max, y_max], [x_min, y_max]]
     else
       raise "#{origin} not supported."
     end
+    if opts[:rotation_in_degree]
+      degree = opts[:rotation_in_degree]
+      center = opts[:center]
+      co = [self.rotate_xy(co[0], degree, center),self.rotate_xy(co[1], degree, center),self.rotate_xy(co[2], degree, center),self.rotate_xy(co[3], degree, center)]
+    end
+    return co
+  end
+
+  def self.rotate_xy(xy, degree, center_xy = [0,0])
+    radian = degree * Math::PI / 180
+    x = Math::cos(radian) * (xy[0] - center_xy[0]) - Math::sin(radian) * (xy[1] - center_xy[1]) + center_xy[0]
+    y = Math::sin(radian) * (xy[0] - center_xy[0]) + Math::cos(radian) * (xy[1] - center_xy[1]) + center_xy[1]
+    return [x,y]
   end
 
   def self.filepath_for(path, opts = {})
@@ -292,6 +304,11 @@ class ImageInfo
           vals = line.split
           h[:stage_y_in_um] = vals[1].to_f * 1000
         end
+
+        if /SIF_CM_STAGE_R/ =~ line
+          vals = line.split
+          h[:stage_rotation_in_degree] = vals[1].to_f
+        end
       end
       
       if m = /SM_SCAN_ROTATION (\d+)/.match(line)
@@ -323,8 +340,7 @@ class ImageInfo
     center_on_stage = [h[:stage_x_in_um], h[:stage_y_in_um]]
     size = [width_in_um, height_in_um]
     center = [width_in_um/2.0, height_in_um/2.0]
-    corners_on_stage = self.corners_on_stage(:center => center_on_stage, :size => size, :origin => 'ru')
-
+    corners_on_stage = self.corners_on_stage(:center => center_on_stage, :rotation_in_degree => h[:scan_rotation], :size => size, :origin => 'ru')
     corners_on_world = opencvtool.transform_points(corners_on_stage, :matrix => stage2world)
 
     width_on_world = sprintf("%.3f", distance(corners_on_world[0],corners_on_world[1])).to_f

@@ -131,7 +131,7 @@ module Vstool
 
 			unless File.exists?(image_info_file)
 			 	raise "#{image_txt_path} does not exist" unless File.exists?(image_txt_path)
-			 	raise "ERROR: VisualStage File is not opened" unless VisualStage::Base.current?
+			 	raise "ERROR: VisualStage File is not opened or vs command is not available. try 'vs status'." unless VisualStage::Base.current?
 				ImageInfo.from_sem_info(image_txt_path, get_stage2world, :image_path => imagefile)
 			end
 			return imagefile if @dry_run

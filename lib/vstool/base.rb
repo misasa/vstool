@@ -46,7 +46,7 @@ module Vstool
 		end
 
 		def self.get_stage2world
-			raise "ERROR: VisualStage File is not opened" unless VisualStage::Base.current?
+			raise "ERROR: VisualStage File is not opened or vs command is not available. try 'vs status'." unless VisualStage::Base.current?
 			width_world = 1000.0
 			height_world = 1000.0
 			points_on_world = [[-width_world,height_world],[width_world,height_world],[width_world,-height_world],[-width_world,-height_world]]
