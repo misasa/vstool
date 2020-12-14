@@ -6,6 +6,10 @@ image, and attach the image to `VisualStage 2007`.
 
 # Dependency
 
+Ruby 2.5, 2.6, or 2.7.
+
+## [gem package -- medusa_rest_client](https://github.com/misasa/medusa_rest_client)
+
 ## [gem package -- opencvtool](https://gitlab.misasa.okayama-u.ac.jp/gems/opencvtool)
 
 ## [gem package -- visual_stage](https://gitlab.misasa.okayama-u.ac.jp/gems/visual_stage)
