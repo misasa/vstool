@@ -6,7 +6,7 @@ image, and attach the image to `VisualStage 2007`.
 
 # Dependency
 
-## [Ruby 2.5, 2.6, or 2.7](https://rubyinstaller.org/)
+## [Ruby 2.5, 2.6, or 2.7 for Windows](https://rubyinstaller.org/)
 
 ## [gem package -- medusa_rest_client](https://github.com/misasa/medusa_rest_client)
 
