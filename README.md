@@ -10,9 +10,9 @@ image, and attach the image to `VisualStage 2007`.
 
 ## [gem package -- medusa_rest_client](https://github.com/misasa/medusa_rest_client)
 
-## [gem package -- opencvtool](https://gitlab.misasa.okayama-u.ac.jp/gems/opencvtool)
+## [gem package -- opencvtool](https://github.com/misasa/opencvtool)
 
-## [gem package -- visual_stage](https://gitlab.misasa.okayama-u.ac.jp/gems/visual_stage)
+## [gem package -- visual_stage](https://github.com/misasa/visual_stage)
 
 ## [python package -- image_mosaic](https://github.com/misasa/image_mosaic)
 
