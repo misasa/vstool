@@ -45,8 +45,8 @@ params = {}
 #
 # SEE ALSO
 #   vs-attach-image
-#   https://gitlab.misasa.okayama-u.ac.jp/gems/vstool
-#   https://gitlab.misasa.okayama-u.ac.jp/gems/vstool/blob/master/bin/vs-add-file
+#   https://github.com/misasa/vstool
+#   https://github.com/misasa/vstool/blob/master/bin/vs-add-file
 #
 # IMPLEMENTATION
 #   Copyright (c) 2015 ISEI, Okayama University

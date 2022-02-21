@@ -74,8 +74,8 @@ SEE ALSO
   vs-attach-image-1270
   vs-attach-image
   loop-vs-attach-image
-  https://gitlab.misasa.okayama-u.ac.jp/gems/vstool
-  https://gitlab.misasa.okayama-u.ac.jp/gems/vstool/edit/master/bin/#{script_name}
+  https://github.com/misasa/vstool
+  https://github.com/misasa/vstool/edit/master/bin/#{script_name}
 
 IMPLEMENTATION
   Copyright (c) 2015-2020 ISEI, Okayama University

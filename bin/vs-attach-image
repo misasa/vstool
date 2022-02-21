@@ -88,8 +88,8 @@ SEE ALSO
   loop-vs-attach-image
   vs-add-file
   vs-get-affine
-  https://gitlab.misasa.okayama-u.ac.jp/gems/vstool
-  https://gitlab.misasa.okayama-u.ac.jp/gems/vstool/blob/master/bin/#{script_name}
+  https://github.com/misasa/vstool
+  https://github.com/misasa/vstool/blob/master/bin/#{script_name}
 
 IMPLEMENTATION
   Copyright (c) 2015-2020 ISEI, Okayama University
